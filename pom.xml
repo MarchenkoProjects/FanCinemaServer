@@ -15,11 +15,21 @@
 	 	<maven.war.version>2.6</maven.war.version>
 	 	
 	 	<springframework.version>4.2.4.RELEASE</springframework.version>
+	 	<springframework.data.version>1.9.2.RELEASE</springframework.data.version>
 	 	<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+	 	<hibernate.version>5.0.2.Final</hibernate.version>
+	 	<mysql.connector>5.1.38</mysql.connector>
+	 	<dbcp2.version>2.1.1</dbcp2.version>
+	 	<javax.transaction.version>1.1</javax.transaction.version>
 	</properties>
  
 	<dependencies>
 		<!-- Spring Framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -30,11 +40,40 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
-		<!-- Javax Servlet-API -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${springframework.data.version}</version>
+		</dependency>
+		<!-- Javax Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${javax.servlet-api.version}</version>
+		</dependency>
+		<!-- Hibernate Entity Manager -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<!-- MySQL Connector -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.connector}</version>
+		</dependency>
+		<!-- DBCP2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${dbcp2.version}</version>
+		</dependency>
+		<!-- Javax Transaction API -->
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>jta</artifactId>
+			<version>${javax.transaction.version}</version>
 		</dependency>
 	</dependencies>
  
