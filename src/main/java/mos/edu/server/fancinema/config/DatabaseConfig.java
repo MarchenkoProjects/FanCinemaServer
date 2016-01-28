@@ -26,6 +26,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource("classpath:db.properties")
 @ComponentScan("mos.edu.server.fancinema")
 public class DatabaseConfig {
+	private static final String PROP_DB_DRIVER = "db.driver";
+	private static final String PROP_DB_URL = "db.url";
+	private static final String PROP_DB_USER = "db.user";
+	private static final String PROP_DB_PASSWORD = "db.password";
+	private static final String PROP_DB_ENTITY_PACKAGE = "db.entity.package";
+	
+	private static final String PROP_DB_INITIAL_SIZE = "db.initialSize";
+	private static final String PROP_DB_MIN_IDLE = "db.minIdle";
+	private static final String PROP_DB_MAX_IDLE = "db.maxIdle";
+	private static final String PROP_DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS = "db.timeBetweenEvictionRunsMillis";
+	private static final String PROP_DB_MIN_EVICTABLE_IDLE_TIME_MILLIS = "db.minEvictableIdleTimeMillis";
+	private static final String PROP_DB_TEST_ON_BORROW = "db.testOnBorrow";
+	private static final String PROP_DB_VALIDATION_QUERY = "db.validationQuery";
 	
 	@Resource
 	private Environment env;
@@ -33,20 +46,21 @@ public class DatabaseConfig {
 	@Bean
 	public DataSource getDataSource() {
 		BasicDataSource basicDataSource = new BasicDataSource();
-		basicDataSource.setDriverClassName(env.getRequiredProperty("db.driver"));
-		basicDataSource.setUrl(env.getRequiredProperty("db.url"));
-		basicDataSource.setUsername(env.getRequiredProperty("db.user"));
-		basicDataSource.setPassword(env.getRequiredProperty("db.password"));
+		basicDataSource.setDriverClassName(env.getRequiredProperty(PROP_DB_DRIVER));
+		basicDataSource.setUrl(env.getRequiredProperty(PROP_DB_URL));
+		basicDataSource.setUsername(env.getRequiredProperty(PROP_DB_USER));
+		basicDataSource.setPassword(env.getRequiredProperty(PROP_DB_PASSWORD));
 		
-		basicDataSource.setInitialSize(Integer.valueOf(env.getRequiredProperty("db.initialSize")));
-		basicDataSource.setMinIdle(Integer.valueOf(env.getRequiredProperty("db.minIdle")));
-		basicDataSource.setMaxIdle(Integer.valueOf(env.getRequiredProperty("db.maxIdle")));
+		basicDataSource.setInitialSize(Integer.valueOf(env.getRequiredProperty(PROP_DB_INITIAL_SIZE)));
+		basicDataSource.setMinIdle(Integer.valueOf(env.getRequiredProperty(PROP_DB_MIN_IDLE)));
+		basicDataSource.setMaxIdle(Integer.valueOf(env.getRequiredProperty(PROP_DB_MAX_IDLE)));
 		basicDataSource.setTimeBetweenEvictionRunsMillis(
-				Long.valueOf(env.getRequiredProperty("db.timeBetweenEvictionRunsMillis")));
+				Long.valueOf(env.getRequiredProperty(PROP_DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS)));
 		basicDataSource.setMinEvictableIdleTimeMillis(
-				Long.valueOf(env.getRequiredProperty("db.minEvictableIdleTimeMillis")));
-		basicDataSource.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty("db.testOnBorrow")));
-		basicDataSource.setValidationQuery(env.getRequiredProperty("db.validationQuery"));
+				Long.valueOf(env.getRequiredProperty(PROP_DB_MIN_EVICTABLE_IDLE_TIME_MILLIS)));
+		basicDataSource.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty(PROP_DB_TEST_ON_BORROW)));
+		basicDataSource.setValidationQuery(env.getRequiredProperty(PROP_DB_VALIDATION_QUERY));
+		
 		return basicDataSource;
 	}
 	
@@ -66,7 +80,7 @@ public class DatabaseConfig {
 		LocalContainerEntityManagerFactoryBean entityManager =
 				new LocalContainerEntityManagerFactoryBean();
 		entityManager.setDataSource(getDataSource());
-		entityManager.setPackagesToScan(env.getRequiredProperty("db.entity.package"));
+		entityManager.setPackagesToScan(env.getRequiredProperty(PROP_DB_ENTITY_PACKAGE));
 		entityManager.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManager.setJpaProperties(getHibernateProperties());
 		return entityManager;

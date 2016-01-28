@@ -24,32 +24,38 @@
 	</properties>
  
 	<dependencies>
+	<!-- Core -->
 		<!-- Spring Framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${springframework.version}</version>
-		</dependency>
+	<!-- Web -->
+		<!-- Spring Framework Web MVC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>${springframework.data.version}</version>
 		</dependency>
 		<!-- Javax Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${javax.servlet-api.version}</version>
+		</dependency>
+	<!-- Database -->
+		<!-- Spring Framework Data JPA -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${springframework.data.version}</version>
+		</dependency>
+		<!-- Hibernate Core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
 		</dependency>
 		<!-- Hibernate Entity Manager -->
 		<dependency>
@@ -63,7 +69,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector}</version>
 		</dependency>
-		<!-- DBCP2 -->
+		<!-- DBCP2 (DataBase Connection Pool 2) -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
