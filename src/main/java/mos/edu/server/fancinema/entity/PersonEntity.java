@@ -12,54 +12,55 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import mos.edu.server.fancinema.Constants;
+
 @Entity
-@Table(name = "personality")
+@Table(name = Constants.TABLE_PERSONALITY)
 public class PersonEntity {
+	private static final String COLUMN_ID_PERSON = "id_person";
+	private static final String COLUMN_FULL_NAME = "full_name";
+	private static final String COLUMN_FIRST_NAME = "first_name";
+	private static final String COLUMN_LAST_NAME = "last_name";
+	private static final String COLUMN_WAS_BORN = "was_born";
+	private static final String COLUMN_BIOGRAPHY = "biography";
+	
+	private static final String WRITERS_MAPPED_FILMS = "writers";
+	private static final String PRODUCERS_MAPPED_FILMS = "producers";
+	private static final String DIRECTORS_MAPPED_FILMS = "directors";
+	private static final String ACTORS_MAPPED_FILMS = "actors";
 
 	@Id
 	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", 
-					  strategy = "increment")
-	@Column(name = "id_person",
-			columnDefinition = "INT(10) UNSIGNED")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Column(name = COLUMN_ID_PERSON, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idPerson;
 	
-	@Column(name = "full_name",
-			length = 30,
-			nullable = false)
+	@Column(name = COLUMN_FULL_NAME, length = 30, nullable = false)
 	private String fullName;
 	
-	@Column(name = "first_name",
-			length = 15,
-			nullable = true)
+	@Column(name = COLUMN_FIRST_NAME, length = 15, nullable = true)
 	private String firstName;
 	
-	@Column(name = "last_name",
-			length = 15,
-			nullable = true)
+	@Column(name = COLUMN_LAST_NAME, length = 15, nullable = true)
 	private String lastName;
 	
-	@Column(name = "was_born",
-			nullable = true)
+	@Column(name = COLUMN_WAS_BORN, nullable = true)
 	private Date wasBorn;
 	
-	@Column(name = "biography",
-			nullable = true,
-			columnDefinition = "TEXT")
+	@Column(name = COLUMN_BIOGRAPHY, nullable = true, columnDefinition = "TEXT")
 	private String biography;
 	
-	@ManyToMany(mappedBy = "directors")
-	private Set<FilmEntity> directorFilms;
+	@ManyToMany(mappedBy = WRITERS_MAPPED_FILMS)
+	private Set<FilmEntity> filmWriters;
 	
-	@ManyToMany(mappedBy = "actors")
-	private Set<FilmEntity> actorFilms;
+	@ManyToMany(mappedBy = PRODUCERS_MAPPED_FILMS)
+	private Set<FilmEntity> filmProducers;
 	
-	@ManyToMany(mappedBy = "writers")
-	private Set<FilmEntity> writerFilms;
+	@ManyToMany(mappedBy = DIRECTORS_MAPPED_FILMS)
+	private Set<FilmEntity> filmDirectors;
 	
-	@ManyToMany(mappedBy = "producers")
-	private Set<FilmEntity> producerFilms;
+	@ManyToMany(mappedBy = ACTORS_MAPPED_FILMS)
+	private Set<FilmEntity> filmActors;
 	
 	protected PersonEntity() {}
-
 }

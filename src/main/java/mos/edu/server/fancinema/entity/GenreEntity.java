@@ -11,31 +11,31 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import mos.edu.server.fancinema.Constants;
+
 @Entity
-@Table(name = "genres")
+@Table(name = Constants.TABLE_GENRES)
 public class GenreEntity {
+	private static final String COLUMN_ID_GENRE = "id_genre";
+	private static final String COLUMN_GENRE_EN = "genre_en";
+	private static final String COLUMN_GENRE_RU = "genre_ru";
+	
+	private static final String GENRES_MAPPED_FILMS = "genres";
 	
 	@Id
 	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", 
-					  strategy = "increment")
-	@Column(name = "id_genre",
-			columnDefinition = "TINYINT(2) UNSIGNED")
+	@GenericGenerator(name = "increment", strategy = "increment")
+	@Column(name = COLUMN_ID_GENRE, nullable = false, columnDefinition = "TINYINT(2) UNSIGNED")
 	private byte idGenre;
 	
-	@Column(name = "genre_en",
-			length = 20,
-			nullable = true)
+	@Column(name = COLUMN_GENRE_EN, length = 20, nullable = true)
 	private String genreEn;
 	
-	@Column(name = "genre_ru",
-			length = 20,
-			nullable = false)
+	@Column(name = COLUMN_GENRE_RU, length = 20, nullable = false)
 	private String genreRu;
 	
-	@ManyToMany(mappedBy = "genres")
+	@ManyToMany(mappedBy = GENRES_MAPPED_FILMS)
 	private Set<FilmEntity> films;
 	
 	protected GenreEntity() {}
-	
 }

@@ -11,31 +11,32 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import mos.edu.server.fancinema.Constants;
+
 @Entity
-@Table(name = "countries")
+@Table(name = Constants.TABLE_COUNTRIES)
 public class CountryEntity {
+	private static final String COLUMN_ID_COUNTRY = "id_country";
+	private static final String COLUMN_COUNTRY_EN = "country_en";
+	private static final String COLUMN_COUNTRY_RU = "country_ru";
+	
+	private static final String COUNTRIES_MAPPED_FILMS = "countries";
 	
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", 
 					  strategy = "increment")
-	@Column(name = "id_country",
-			columnDefinition = "TINYINT(3) UNSIGNED")
-	private byte idGenre;
+	@Column(name = COLUMN_ID_COUNTRY, nullable = false, columnDefinition = "TINYINT(3) UNSIGNED")
+	private byte idCountry;
 	
-	@Column(name = "country_en",
-			length = 40,
-			nullable = true)
+	@Column(name = COLUMN_COUNTRY_EN, length = 40, nullable = true)
 	private String countryEn;
 	
-	@Column(name = "country_ru",
-			length = 40,
-			nullable = false)
+	@Column(name = COLUMN_COUNTRY_RU, length = 40, nullable = false)
 	private String countryRu;
 	
-	@ManyToMany(mappedBy = "countries")
+	@ManyToMany(mappedBy = COUNTRIES_MAPPED_FILMS)
 	private Set<FilmEntity> films;
 	
 	protected CountryEntity() {}
-	
 }

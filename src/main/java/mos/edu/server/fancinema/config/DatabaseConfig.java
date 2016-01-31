@@ -44,52 +44,57 @@ public class DatabaseConfig {
 	private Environment env;
 	
 	@Bean
-	public DataSource getDataSource() {
-		BasicDataSource basicDataSource = new BasicDataSource();
-		basicDataSource.setDriverClassName(env.getRequiredProperty(PROP_DB_DRIVER));
-		basicDataSource.setUrl(env.getRequiredProperty(PROP_DB_URL));
-		basicDataSource.setUsername(env.getRequiredProperty(PROP_DB_USER));
-		basicDataSource.setPassword(env.getRequiredProperty(PROP_DB_PASSWORD));
-		
-		basicDataSource.setInitialSize(Integer.valueOf(env.getRequiredProperty(PROP_DB_INITIAL_SIZE)));
-		basicDataSource.setMinIdle(Integer.valueOf(env.getRequiredProperty(PROP_DB_MIN_IDLE)));
-		basicDataSource.setMaxIdle(Integer.valueOf(env.getRequiredProperty(PROP_DB_MAX_IDLE)));
-		basicDataSource.setTimeBetweenEvictionRunsMillis(
+    public DataSource dataSource() {
+    	BasicDataSource dataSource = new BasicDataSource();
+
+    	dataSource.setDriverClassName(env.getRequiredProperty(PROP_DB_DRIVER));
+    	dataSource.setUrl(env.getRequiredProperty(PROP_DB_URL));
+    	dataSource.setUsername(env.getRequiredProperty(PROP_DB_USER));
+    	dataSource.setPassword(env.getRequiredProperty(PROP_DB_PASSWORD));
+        
+    	dataSource.setInitialSize(Integer.valueOf(env.getRequiredProperty(PROP_DB_INITIAL_SIZE)));
+    	dataSource.setMinIdle(Integer.valueOf(env.getRequiredProperty(PROP_DB_MIN_IDLE)));
+    	dataSource.setMaxIdle(Integer.valueOf(env.getRequiredProperty(PROP_DB_MAX_IDLE)));
+    	dataSource.setTimeBetweenEvictionRunsMillis(
 				Long.valueOf(env.getRequiredProperty(PROP_DB_TIME_BETWEEN_EVICTION_RUNS_MILLIS)));
-		basicDataSource.setMinEvictableIdleTimeMillis(
+    	dataSource.setMinEvictableIdleTimeMillis(
 				Long.valueOf(env.getRequiredProperty(PROP_DB_MIN_EVICTABLE_IDLE_TIME_MILLIS)));
-		basicDataSource.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty(PROP_DB_TEST_ON_BORROW)));
-		basicDataSource.setValidationQuery(env.getRequiredProperty(PROP_DB_VALIDATION_QUERY));
-		
-		return basicDataSource;
-	}
-	
-	private Properties getHibernateProperties() {
-		Properties properties = new Properties();
-		try {
+    	dataSource.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty(PROP_DB_TEST_ON_BORROW)));
+    	dataSource.setValidationQuery(env.getRequiredProperty(PROP_DB_VALIDATION_QUERY));
+        
+    	return dataSource;
+    }
+    
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        try {
 			InputStream is = getClass().getClassLoader().getResourceAsStream("hibernate.properties");
 			properties.load(is);
+			is.close();
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Can`t find 'hibernate.properties' in classpath!", e);
 		}
-		return properties;
-	}
-	
-	@Bean
-	public LocalContainerEntityManagerFactoryBean getEntityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean entityManager =
-				new LocalContainerEntityManagerFactoryBean();
-		entityManager.setDataSource(getDataSource());
-		entityManager.setPackagesToScan(env.getRequiredProperty(PROP_DB_ENTITY_PACKAGE));
-		entityManager.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-		entityManager.setJpaProperties(getHibernateProperties());
-		return entityManager;
-	}
-	
-	@Bean
-	public PlatformTransactionManager getTransactionManager() {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(getEntityManagerFactory().getObject());
+        return properties;
+    }
+ 
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = 
+        		new LocalContainerEntityManagerFactoryBean();
+        
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROP_DB_ENTITY_PACKAGE));
+        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+        
+        return entityManagerFactoryBean;
+    }
+ 
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+    	JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return transactionManager;
-	}
+    }
+
 }
