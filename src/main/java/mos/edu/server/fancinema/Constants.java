@@ -16,9 +16,16 @@ public final class Constants {
 	public static final String JOIN_TABLE_FILM_DIRECTOR = "film_director";
 	public static final String JOIN_TABLE_FILM_ACTOR = "film_actor";
 	
-	public static final String TABLE_RATING_FILM = "rating_film";
+	public static final String TABLE_RATING_FILM = "rating_films";
 	public static final String TABLE_FAVORITE = "favorite";
 	public static final String TABLE_REVIEWS = "reviews";
 	public static final String TABLE_USERS = "users";
+	
+	
+	public static final String PICTURES_EXTENSION = ".jpg";
+	public static final String URL_FOR_PICTURES = "/"; // ???
+	
+	public static final String URI_HOME = "/";
+	public static final String URI_FILMS = "/films";
 	
 }

@@ -18,15 +18,15 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		Class<?>[] servletConfigClasses = {
-				WebConfig.class
-			};
+			WebConfig.class
+		};
 		return servletConfigClasses;
 	}
 	
 	@Override
 	protected String[] getServletMappings() {
 		String[] servletMappings = {
-			"/"
+			Constants.URI_HOME
 		};
 		return servletMappings;
 	}

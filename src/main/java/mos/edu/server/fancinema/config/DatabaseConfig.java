@@ -79,15 +79,15 @@ public class DatabaseConfig {
  
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = 
+        LocalContainerEntityManagerFactoryBean entityManagerFactory = 
         		new LocalContainerEntityManagerFactoryBean();
         
-        entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROP_DB_ENTITY_PACKAGE));
-        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+        entityManagerFactory.setDataSource(dataSource());
+        entityManagerFactory.setPackagesToScan(env.getRequiredProperty(PROP_DB_ENTITY_PACKAGE));
+        entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        entityManagerFactory.setJpaProperties(hibernateProperties());
         
-        return entityManagerFactoryBean;
+        return entityManagerFactory;
     }
  
     @Bean
