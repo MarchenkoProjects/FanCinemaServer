@@ -19,12 +19,16 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mos.edu.server.fancinema.Constants;
+import mos.edu.server.fancinema.entity.represent.Rating;
 
 @Entity
 @Table(name = Constants.TABLE_FILMS)
-public class FilmEntity implements Serializable {
+@JsonInclude(Include.NON_EMPTY)
+public class Film implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_FILM = "id_film";
@@ -37,16 +41,16 @@ public class FilmEntity implements Serializable {
 	public static final String COLUMN_BUDGET = "budget";
 	public static final String COLUMN_WORLD_FEES = "world_fees";
 	
-	private static final String JOIN_COLUMN_FILM_ID = "film_id";
-	private static final String JOIN_COLUMN_GENRE_ID = "genre_id";
-	private static final String JOIN_COLUMN_COUNTRY_ID = "country_id";
+	public static final String JOIN_COLUMN_FILM_ID = "film_id";
+	public static final String JOIN_COLUMN_GENRE_ID = "genre_id";
+	public static final String JOIN_COLUMN_COUNTRY_ID = "country_id";
 	
-	private static final String JOIN_COLUMN_WRITER_ID = "writer_id";
-	private static final String JOIN_COLUMN_PRODUCER_ID = "producer_id";
-	private static final String JOIN_COLUMN_DIRECTOR_ID = "director_id";
-	private static final String JOIN_COLUMN_ACTOR_ID = "actor_id";
+	public static final String JOIN_COLUMN_WRITER_ID = "writer_id";
+	public static final String JOIN_COLUMN_PRODUCER_ID = "producer_id";
+	public static final String JOIN_COLUMN_DIRECTOR_ID = "director_id";
+	public static final String JOIN_COLUMN_ACTOR_ID = "actor_id";
 	
-	private static final String FILMS_MAPPED_USERS = "film";
+	public static final String FILMS_MAPPED_USERS = "film";
 	
 	@Id
 	@GeneratedValue(generator = "increment")
@@ -81,73 +85,85 @@ public class FilmEntity implements Serializable {
 	@Column(name = COLUMN_WORLD_FEES, nullable = true, columnDefinition = "INT(10) UNSIGNED")
 	private long worldFees;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Transient
+	private Rating rating;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_GENRE,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
-			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_GENRE_ID, referencedColumnName = GenreEntity.COLUMN_ID_GENRE))
-	private Set<GenreEntity> genres;
+			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_GENRE_ID, referencedColumnName = Genre.COLUMN_ID_GENRE))
+	private Set<Genre> genres;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_COUNTRY,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
-			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_COUNTRY_ID, referencedColumnName = CountryEntity.COLUMN_ID_COUNTRY))
-	private Set<CountryEntity> countries;
+			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_COUNTRY_ID, referencedColumnName = Country.COLUMN_ID_COUNTRY))
+	private Set<Country> countries;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_WRITER,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
-			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_WRITER_ID, referencedColumnName = PersonEntity.COLUMN_ID_PERSON))
-	private Set<PersonEntity> writers;
+			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_WRITER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> writers;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_PRODUCER,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
-			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_PRODUCER_ID, referencedColumnName = PersonEntity.COLUMN_ID_PERSON))
-	private Set<PersonEntity> producers;
+			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_PRODUCER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> producers;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_DIRECTOR,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
-			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_DIRECTOR_ID, referencedColumnName = PersonEntity.COLUMN_ID_PERSON))
-	private Set<PersonEntity> directors;
+			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_DIRECTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> directors;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_ACTOR,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
-			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_ACTOR_ID, referencedColumnName = PersonEntity.COLUMN_ID_PERSON))
-	private Set<PersonEntity> actors;
+			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_ACTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> actors;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<RatingFilmEntity> ratingFilms;
+	private Set<RatingFilm> ratingFilms;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FavoriteEntity> favorite;
+	private Set<Favorite> favorite;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<ReviewEntity> reviews;
+	private Set<Review> reviews;
 	
-	protected FilmEntity() {}
-
-	public FilmEntity(int idFilm, String originalName, String alternativeName, short year, String description,
-			byte duration, String slogan, int budget, int worldFees) {
-		this.idFilm = idFilm;
-		this.originalName = originalName;
-		this.alternativeName = alternativeName;
-		this.year = year;
-		this.description = description;
-		this.duration = duration;
-		this.slogan = slogan;
-		this.budget = budget;
-		this.worldFees = worldFees;
+	protected Film() {}
+	
+	protected Film(Film film) {
+		this.idFilm = film.idFilm;
+		this.posterUrl = film.posterUrl;
+		this.originalName = film.originalName;
+		this.alternativeName = film.alternativeName;
+		this.year = film.year;
+		this.description = film.description;
+		this.duration = film.duration;
+		this.slogan = film.slogan;
+		this.budget = film.budget;
+		this.worldFees = film.worldFees;
+		this.genres = film.genres;
+		this.countries = film.countries;
+		this.writers = film.writers;
+		this.producers = film.producers;
+		this.directors = film.directors;
+		this.actors = film.actors;
+		
+		this.ratingFilms = film.ratingFilms;
+		this.favorite = film.favorite;
+		this.reviews = film.reviews;
+	}
+	
+	public Film(Film film, Double rating, long votesCount) {
+		this(film);
+		this.rating = new Rating(rating, votesCount);
 	}
 
 	public int getIdFilm() {
@@ -231,75 +247,83 @@ public class FilmEntity implements Serializable {
 		this.worldFees = worldFees;
 	}
 
-	public Set<GenreEntity> getGenres() {
+	public Rating getRating() {
+		return rating;
+	}
+
+	/*public void setRating(Rating rating) {
+		this.rating = rating;
+	}*/
+
+	public Set<Genre> getGenres() {
 		return genres;
 	}
 
-	public void setGenres(Set<GenreEntity> genres) {
+	public void setGenres(Set<Genre> genres) {
 		this.genres = genres;
 	}
 
-	public Set<CountryEntity> getCountries() {
+	public Set<Country> getCountries() {
 		return countries;
 	}
 
-	public void setCountries(Set<CountryEntity> countries) {
+	public void setCountries(Set<Country> countries) {
 		this.countries = countries;
 	}
 
-	public Set<PersonEntity> getWriters() {
+	public Set<Person> getWriters() {
 		return writers;
 	}
 
-	public void setWriters(Set<PersonEntity> writers) {
+	public void setWriters(Set<Person> writers) {
 		this.writers = writers;
 	}
 
-	public Set<PersonEntity> getProducers() {
+	public Set<Person> getProducers() {
 		return producers;
 	}
 
-	public void setProducers(Set<PersonEntity> producers) {
+	public void setProducers(Set<Person> producers) {
 		this.producers = producers;
 	}
 
-	public Set<PersonEntity> getDirectors() {
+	public Set<Person> getDirectors() {
 		return directors;
 	}
 
-	public void setDirectors(Set<PersonEntity> directors) {
+	public void setDirectors(Set<Person> directors) {
 		this.directors = directors;
 	}
 
-	public Set<PersonEntity> getActors() {
+	public Set<Person> getActors() {
 		return actors;
 	}
 
-	public void setActors(Set<PersonEntity> actors) {
+	public void setActors(Set<Person> actors) {
 		this.actors = actors;
 	}
 
-	public Set<RatingFilmEntity> getRatingFilms() {
+	public Set<RatingFilm> getRatingFilms() {
 		return ratingFilms;
 	}
 
-	public void setRatingFilms(Set<RatingFilmEntity> ratingFilms) {
+	public void setRatingFilms(Set<RatingFilm> ratingFilms) {
 		this.ratingFilms = ratingFilms;
 	}
 
-	public Set<FavoriteEntity> getFavorite() {
+	public Set<Favorite> getFavorite() {
 		return favorite;
 	}
 
-	public void setFavorite(Set<FavoriteEntity> favorite) {
+	public void setFavorite(Set<Favorite> favorite) {
 		this.favorite = favorite;
 	}
 
-	public Set<ReviewEntity> getReviews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 
-	public void setReviews(Set<ReviewEntity> reviews) {
+	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
 	

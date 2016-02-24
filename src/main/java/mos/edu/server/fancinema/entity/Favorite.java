@@ -16,7 +16,7 @@ import mos.edu.server.fancinema.entity.composite_key.FavoriteKey;
 
 @Entity
 @Table(name = Constants.TABLE_FAVORITE)
-public class FavoriteEntity implements Serializable {
+public class Favorite implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String COLUMN_LOOKED = "looked";
@@ -27,27 +27,17 @@ public class FavoriteEntity implements Serializable {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
-	private UserEntity user;
+	private User user;
 	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "film_id", insertable = false, updatable = false)
-	private FilmEntity film;
+	private Film film;
 	
 	@Column(name = COLUMN_LOOKED, nullable = false, columnDefinition = "BIT(1) DEFAULT b'0'")
 	private boolean looked;
 	
-	protected FavoriteEntity() {}
-	
-	public FavoriteEntity(int idUser, int idFilm, boolean looked) {
-		this.favoriteKey = new FavoriteKey(idUser, idFilm);
-		this.looked = looked;
-	}
-
-	public FavoriteEntity(FavoriteKey favoriteKey, boolean looked) {
-		this.favoriteKey = favoriteKey;
-		this.looked = looked;
-	}
+	protected Favorite() {}
 	
 	public FavoriteKey getFavoriteKey() {
 		return favoriteKey;
@@ -57,19 +47,19 @@ public class FavoriteEntity implements Serializable {
 		this.favoriteKey = favoriteKey;
 	}
 
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public FilmEntity getFilm() {
+	public Film getFilm() {
 		return film;
 	}
 
-	public void setFilm(FilmEntity film) {
+	public void setFilm(Film film) {
 		this.film = film;
 	}
 

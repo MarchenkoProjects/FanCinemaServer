@@ -16,7 +16,7 @@ import mos.edu.server.fancinema.entity.composite_key.ReviewKey;
 
 @Entity
 @Table(name = Constants.TABLE_REVIEWS)
-public class ReviewEntity implements Serializable {
+public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String COLUMN_REVIEW = "review";
@@ -27,28 +27,17 @@ public class ReviewEntity implements Serializable {
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
-	private UserEntity user;
+	private User user;
 	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "film_id", insertable = false, updatable = false)
-	private FilmEntity film;
+	private Film film;
 	
 	@Column(name = COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
 	private String review;
 	
-	protected ReviewEntity() {}
-	
-	public ReviewEntity(int idUser, int idFilm, String review) {
-		this.reviewKey = new ReviewKey(idUser, idFilm);
-		this.review = review;
-	}
-
-	public ReviewEntity(ReviewKey reviewKey, String review) {
-		super();
-		this.reviewKey = reviewKey;
-		this.review = review;
-	}
+	protected Review() {}
 
 	public ReviewKey getReviewKey() {
 		return reviewKey;
@@ -58,19 +47,19 @@ public class ReviewEntity implements Serializable {
 		this.reviewKey = reviewKey;
 	}
 
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public FilmEntity getFilm() {
+	public Film getFilm() {
 		return film;
 	}
 
-	public void setFilm(FilmEntity film) {
+	public void setFilm(Film film) {
 		this.film = film;
 	}
 

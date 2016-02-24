@@ -14,11 +14,13 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import mos.edu.server.fancinema.Constants;
 
 @Entity
 @Table(name = Constants.TABLE_COUNTRIES)
-public class CountryEntity implements Serializable {
+public class Country implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_COUNTRY = "id_country";
@@ -31,32 +33,27 @@ public class CountryEntity implements Serializable {
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", 
 					  strategy = "increment")
-	@Column(name = COLUMN_ID_COUNTRY, nullable = false, columnDefinition = "TINYINT(3) UNSIGNED")
-	private byte idCountry;
+	@Column(name = COLUMN_ID_COUNTRY, nullable = false, columnDefinition = "SMALLINT(3) UNSIGNED")
+	private short idCountry;
 	
+	@JsonIgnore
 	@Column(name = COLUMN_COUNTRY_EN, length = 40, nullable = true)
 	private String countryEn;
 	
 	@Column(name = COLUMN_COUNTRY_RU, length = 40, nullable = false)
 	private String countryRu;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = COUNTRIES_MAPPED_FILMS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FilmEntity> films;
+	private Set<Film> films;
 	
-	protected CountryEntity() {}
+	protected Country() {}
 
-	public CountryEntity(byte idCountry, String countryEn, String countryRu, Set<FilmEntity> films) {
-		this.idCountry = idCountry;
-		this.countryEn = countryEn;
-		this.countryRu = countryRu;
-		this.films = films;
-	}
-
-	public byte getIdCountry() {
+	public short getIdCountry() {
 		return idCountry;
 	}
 
-	public void setIdCountry(byte idCountry) {
+	public void setIdCountry(short idCountry) {
 		this.idCountry = idCountry;
 	}
 
@@ -76,11 +73,11 @@ public class CountryEntity implements Serializable {
 		this.countryRu = countryRu;
 	}
 
-	public Set<FilmEntity> getFilms() {
+	public Set<Film> getFilms() {
 		return films;
 	}
 
-	public void setFilms(Set<FilmEntity> films) {
+	public void setFilms(Set<Film> films) {
 		this.films = films;
 	}
 	

@@ -14,11 +14,16 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import mos.edu.server.fancinema.Constants;
 
 @Entity
 @Table(name = Constants.TABLE_GENRES)
-public class GenreEntity implements Serializable {
+@JsonInclude(Include.NON_EMPTY)
+public class Genre implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_GENRE = "id_genre";
@@ -39,16 +44,11 @@ public class GenreEntity implements Serializable {
 	@Column(name = COLUMN_GENRE_RU, length = 20, nullable = false)
 	private String genreRu;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = GENRES_MAPPED_FILMS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FilmEntity> films;
+	private Set<Film> films;
 	
-	protected GenreEntity() {}
-
-	public GenreEntity(byte idGenre, String genreEn, String genreRu) {
-		this.idGenre = idGenre;
-		this.genreEn = genreEn;
-		this.genreRu = genreRu;
-	}
+	protected Genre() {}
 
 	public byte getIdGenre() {
 		return idGenre;
@@ -74,11 +74,11 @@ public class GenreEntity implements Serializable {
 		this.genreRu = genreRu;
 	}
 
-	public Set<FilmEntity> getFilms() {
+	public Set<Film> getFilms() {
 		return films;
 	}
 
-	public void setFilms(Set<FilmEntity> films) {
+	public void setFilms(Set<Film> films) {
 		this.films = films;
 	}
 	

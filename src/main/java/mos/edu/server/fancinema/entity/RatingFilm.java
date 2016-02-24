@@ -10,42 +10,39 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.composite_key.RatingFilmKey;
 
 @Entity
 @Table(name = Constants.TABLE_RATING_FILM)
-public class RatingFilmEntity implements Serializable {
+@JsonInclude(Include.NON_EMPTY)
+public class RatingFilm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String COLUMN_RATING = "rating";
 	
+	@JsonIgnore
 	@EmbeddedId
 	private RatingFilmKey ratingFilmKey;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
-	private UserEntity user;
+	private User user;
 	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "film_id", insertable = false, updatable = false)
-	private FilmEntity film;
-	
+	private Film film;
+
 	@Column(name = COLUMN_RATING, nullable = false, columnDefinition = "TINYINT(2) UNSIGNED")
 	private byte rating;
 	
-	protected RatingFilmEntity() {}
+	protected RatingFilm() {}
 	
-	public RatingFilmEntity(int idUser, int idFilm, byte rating) {
-		this.ratingFilmKey = new RatingFilmKey(idUser, idFilm);
-		this.rating = rating;
-	}
-
-	public RatingFilmEntity(RatingFilmKey ratingFilmKey, byte rating) {
-		this.ratingFilmKey = ratingFilmKey;
+	public RatingFilm(byte rating) {
 		this.rating = rating;
 	}
 	
@@ -57,19 +54,19 @@ public class RatingFilmEntity implements Serializable {
 		this.ratingFilmKey = ratingFilmKey;
 	}
 
-	public UserEntity getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserEntity user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public FilmEntity getFilm() {
+	public Film getFilm() {
 		return film;
 	}
 
-	public void setFilm(FilmEntity film) {
+	public void setFilm(Film film) {
 		this.film = film;
 	}
 

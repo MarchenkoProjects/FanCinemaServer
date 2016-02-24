@@ -12,14 +12,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mos.edu.server.fancinema.Constants;
 
 @Entity
 @Table(name = Constants.TABLE_PERSONALITY)
-public class PersonEntity implements Serializable {
+@JsonInclude(Include.NON_EMPTY)
+public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_PERSON = "id_person";
@@ -40,12 +46,17 @@ public class PersonEntity implements Serializable {
 	@Column(name = COLUMN_ID_PERSON, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idPerson;
 	
+	@Transient
+	private String fotoUrl;
+	
 	@Column(name = COLUMN_FULL_NAME, length = 30, nullable = false)
 	private String fullName;
 	
+	@JsonIgnore
 	@Column(name = COLUMN_FIRST_NAME, length = 15, nullable = true)
 	private String firstName;
 	
+	@JsonIgnore
 	@Column(name = COLUMN_LAST_NAME, length = 15, nullable = true)
 	private String lastName;
 	
@@ -55,29 +66,23 @@ public class PersonEntity implements Serializable {
 	@Column(name = COLUMN_BIOGRAPHY, nullable = true, columnDefinition = "TEXT")
 	private String biography;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = WRITERS_MAPPED_FILMS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FilmEntity> filmWriters;
+	private Set<Film> filmWriters;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = PRODUCERS_MAPPED_FILMS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FilmEntity> filmProducers;
+	private Set<Film> filmProducers;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = DIRECTORS_MAPPED_FILMS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FilmEntity> filmDirectors;
+	private Set<Film> filmDirectors;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy = ACTORS_MAPPED_FILMS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FilmEntity> filmActors;
+	private Set<Film> filmActors;
 	
-	protected PersonEntity() {}
-
-	public PersonEntity(int idPerson, String fullName, String firstName, String lastName, Date wasBorn,
-			String biography) {
-		this.idPerson = idPerson;
-		this.fullName = fullName;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.wasBorn = wasBorn;
-		this.biography = biography;
-	}
+	protected Person() {}
 
 	public int getIdPerson() {
 		return idPerson;
@@ -86,6 +91,15 @@ public class PersonEntity implements Serializable {
 	public void setIdPerson(int idPerson) {
 		this.idPerson = idPerson;
 	}
+
+	public String getFotoUrl() {
+		this.fotoUrl = Constants.URL_FOR_PICTURES + String.valueOf(idPerson) + Constants.PICTURES_EXTENSION;
+		return fotoUrl;
+	}
+
+	/*public void setFotoUrl(String fotoUrl) {
+		this.fotoUrl = fotoUrl;
+	}*/
 
 	public String getFullName() {
 		return fullName;
@@ -127,35 +141,35 @@ public class PersonEntity implements Serializable {
 		this.biography = biography;
 	}
 
-	public Set<FilmEntity> getFilmWriters() {
+	public Set<Film> getFilmWriters() {
 		return filmWriters;
 	}
 
-	public void setFilmWriters(Set<FilmEntity> filmWriters) {
+	public void setFilmWriters(Set<Film> filmWriters) {
 		this.filmWriters = filmWriters;
 	}
 
-	public Set<FilmEntity> getFilmProducers() {
+	public Set<Film> getFilmProducers() {
 		return filmProducers;
 	}
 
-	public void setFilmProducers(Set<FilmEntity> filmProducers) {
+	public void setFilmProducers(Set<Film> filmProducers) {
 		this.filmProducers = filmProducers;
 	}
 
-	public Set<FilmEntity> getFilmDirectors() {
+	public Set<Film> getFilmDirectors() {
 		return filmDirectors;
 	}
 
-	public void setFilmDirectors(Set<FilmEntity> filmDirectors) {
+	public void setFilmDirectors(Set<Film> filmDirectors) {
 		this.filmDirectors = filmDirectors;
 	}
 
-	public Set<FilmEntity> getFilmActors() {
+	public Set<Film> getFilmActors() {
 		return filmActors;
 	}
 
-	public void setFilmActors(Set<FilmEntity> filmActors) {
+	public void setFilmActors(Set<Film> filmActors) {
 		this.filmActors = filmActors;
 	}
 	

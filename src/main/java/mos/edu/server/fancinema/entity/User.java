@@ -11,14 +11,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import mos.edu.server.fancinema.Constants;
 
 @Entity
 @Table(name = Constants.TABLE_USERS)
-public class UserEntity implements Serializable {
+public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_USER = "id_user";
@@ -34,32 +37,32 @@ public class UserEntity implements Serializable {
 	@Column(name = COLUMN_ID_USER, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idUser;
 	
+	@Transient
+	private String avatarUrl;
+	
 	@Column(name = COLUMN_LOGIN, length = 15, nullable = false)
 	private String login;
 	
+	@JsonIgnore
 	@Column(name = COLUMN_PASSWORD, length = 32, nullable = false)
 	private String password;
 	
 	@Column(name = COLUMN_EMAIL, length = 30, nullable = false)
 	private String email;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<RatingFilmEntity> ratingFilms;
+	private Set<RatingFilm> ratingFilms;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<FavoriteEntity> favorite;
+	private Set<Favorite> favorite;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<ReviewEntity> reviews;
+	private Set<Review> reviews;
 	
-	protected UserEntity() {}
-
-	public UserEntity(int idUser, String login, String password, String email) {
-		this.idUser = idUser;
-		this.login = login;
-		this.password = password;
-		this.email = email;
-	}
+	protected User() {}
 
 	public int getIdUser() {
 		return idUser;
@@ -68,6 +71,15 @@ public class UserEntity implements Serializable {
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
+
+	public String getAvatarUrl() {
+		this.avatarUrl = Constants.URL_FOR_PICTURES + String.valueOf(idUser) + Constants.PICTURES_EXTENSION;
+		return avatarUrl;
+	}
+
+	/*public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}*/
 
 	public String getLogin() {
 		return login;
@@ -93,27 +105,27 @@ public class UserEntity implements Serializable {
 		this.email = email;
 	}
 
-	public Set<RatingFilmEntity> getRatingFilms() {
+	public Set<RatingFilm> getRatingFilms() {
 		return ratingFilms;
 	}
 
-	public void setRatingFilms(Set<RatingFilmEntity> ratingFilms) {
+	public void setRatingFilms(Set<RatingFilm> ratingFilms) {
 		this.ratingFilms = ratingFilms;
 	}
 
-	public Set<FavoriteEntity> getFavorite() {
+	public Set<Favorite> getFavorite() {
 		return favorite;
 	}
 
-	public void setFavorite(Set<FavoriteEntity> favorite) {
+	public void setFavorite(Set<Favorite> favorite) {
 		this.favorite = favorite;
 	}
 
-	public Set<ReviewEntity> getReviews() {
+	public Set<Review> getReviews() {
 		return reviews;
 	}
 
-	public void setReviews(Set<ReviewEntity> reviews) {
+	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
 	}
 	
