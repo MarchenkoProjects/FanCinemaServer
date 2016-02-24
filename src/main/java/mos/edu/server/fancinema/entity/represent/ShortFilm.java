@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -15,13 +18,17 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.Film;
+import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 
 @Entity
 @Table(name = Constants.TABLE_FILMS)
+@JsonInclude(Include.NON_EMPTY)
 public class ShortFilm {
 
 	@Id
@@ -45,6 +52,30 @@ public class ShortFilm {
 	@Transient
 	private Rating rating;
 	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = Constants.JOIN_TABLE_FILM_WRITER,
+			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
+			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_WRITER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> writers;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = Constants.JOIN_TABLE_FILM_PRODUCER,
+			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
+			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_PRODUCER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> producers;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = Constants.JOIN_TABLE_FILM_DIRECTOR,
+			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
+			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_DIRECTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> directors;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = Constants.JOIN_TABLE_FILM_ACTOR,
+			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
+			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_ACTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
+	private Set<Person> actors;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = Film.FILMS_MAPPED_USERS, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<RatingFilm> ratingFilms;
@@ -57,6 +88,10 @@ public class ShortFilm {
 		this.originalName = shortFilm.originalName;
 		this.alternativeName = shortFilm.alternativeName;
 		this.year = shortFilm.year;
+		this.writers = shortFilm.writers;
+		this.producers = shortFilm.producers;
+		this.directors = shortFilm.directors;
+		this.actors = shortFilm.actors;
 		this.ratingFilms = shortFilm.ratingFilms;
 	}
 

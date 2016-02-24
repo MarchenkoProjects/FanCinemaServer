@@ -35,10 +35,10 @@ public class Person implements Serializable {
 	public static final String COLUMN_WAS_BORN = "was_born";
 	public static final String COLUMN_BIOGRAPHY = "biography";
 	
-	private static final String WRITERS_MAPPED_FILMS = "writers";
-	private static final String PRODUCERS_MAPPED_FILMS = "producers";
-	private static final String DIRECTORS_MAPPED_FILMS = "directors";
-	private static final String ACTORS_MAPPED_FILMS = "actors";
+	public static final String WRITERS_MAPPED_FILMS = "writers";
+	public static final String PRODUCERS_MAPPED_FILMS = "producers";
+	public static final String DIRECTORS_MAPPED_FILMS = "directors";
+	public static final String ACTORS_MAPPED_FILMS = "actors";
 
 	@Id
 	@GeneratedValue(generator = "increment")
