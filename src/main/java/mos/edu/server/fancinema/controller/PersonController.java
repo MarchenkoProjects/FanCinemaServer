@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.represent.FilmsPerson;
 import mos.edu.server.fancinema.service.PersonService;
 
 @RestController
-@RequestMapping(value = "/persons")
+@RequestMapping(value = Constants.URI_PERSONS)
 public class PersonController {
 
 	@Autowired

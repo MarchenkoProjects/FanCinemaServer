@@ -7,5 +7,5 @@ import mos.edu.server.fancinema.entity.Genre;
 
 @Repository
 public interface GenreRepository extends JpaRepository<Genre, Byte> {
-
+	
 }

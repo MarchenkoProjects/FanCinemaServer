@@ -22,10 +22,13 @@ public final class Constants {
 	public static final String TABLE_USERS = "users";
 	
 	
-	public static final String PICTURES_EXTENSION = ".jpg";
 	public static final String URL_FOR_PICTURES = "/"; // ???
+	public static final String PICTURES_EXTENSION = ".jpg";
 	
 	public static final String URI_HOME = "/";
 	public static final String URI_FILMS = "/films";
+	public static final String URI_PERSONS = "/persons";
+	public static final String URI_GENRES = "/genres";
+	public static final String URI_COUNTRIES = "/countries";
 	
 }
