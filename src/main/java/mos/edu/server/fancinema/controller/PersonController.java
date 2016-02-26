@@ -56,8 +56,8 @@ public class PersonController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
-	@RequestMapping(value = "/{id_person}",
-					method = RequestMethod.GET,
+	@RequestMapping(method = RequestMethod.GET,
+					value = Constants.URI_PERSON_BY_ID,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Person>> getPerson(@PathVariable(value = "id_person") int id) {
 		Person person = personService.getPerson(id);
@@ -69,8 +69,8 @@ public class PersonController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
-	@RequestMapping(value = "/{id_person}/films",
-					method = RequestMethod.GET,
+	@RequestMapping(method = RequestMethod.GET,
+					value = Constants.URI_PERSON_FILMS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<FilmsPerson>> getFilmsOfPerson(@PathVariable(value = "id_person") int id) {
 		

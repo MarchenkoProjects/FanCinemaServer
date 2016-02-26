@@ -31,6 +31,4 @@ public interface FilmService {
 	
 	Page<FilmReviews> getAllReview(int id, int page, int size);
 	
-	RatingFilm getFilmRatingOfUser(int idFilm, int idUser);
-	
 }

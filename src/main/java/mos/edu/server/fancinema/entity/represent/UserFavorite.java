@@ -1,6 +1,4 @@
-package mos.edu.server.fancinema.entity;
-
-import java.io.Serializable;
+package mos.edu.server.fancinema.entity.represent;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -12,14 +10,13 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import mos.edu.server.fancinema.Constants;
+import mos.edu.server.fancinema.entity.Favorite;
+import mos.edu.server.fancinema.entity.User;
 import mos.edu.server.fancinema.entity.composite_key.FavoriteKey;
 
 @Entity
 @Table(name = Constants.TABLE_FAVORITE)
-public class Favorite implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	public static final String COLUMN_LOOKED = "looked";
+public class UserFavorite {
 
 	@JsonIgnore
 	@EmbeddedId
@@ -30,15 +27,14 @@ public class Favorite implements Serializable {
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private User user;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "film_id", insertable = false, updatable = false)
-	private Film film;
+	private ShortFilm film;
 	
-	@Column(name = COLUMN_LOOKED, nullable = false, columnDefinition = "BIT(1) DEFAULT b'0'")
+	@Column(name = Favorite.COLUMN_LOOKED, nullable = false, columnDefinition = "BIT(1) DEFAULT b'0'")
 	private boolean looked;
 	
-	protected Favorite() {}
+	protected UserFavorite() {}
 	
 	public FavoriteKey getFavoriteKey() {
 		return favoriteKey;
@@ -47,20 +43,12 @@ public class Favorite implements Serializable {
 	public void setFavoriteKey(FavoriteKey favoriteKey) {
 		this.favoriteKey = favoriteKey;
 	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Film getFilm() {
+	
+	public ShortFilm getFilm() {
 		return film;
 	}
 
-	public void setFilm(Film film) {
+	public void setFilm(ShortFilm film) {
 		this.film = film;
 	}
 

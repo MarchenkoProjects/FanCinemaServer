@@ -35,29 +35,21 @@ public class FilmServiceImpl implements FilmService {
 	@Override
 	@Transactional(readOnly = true)
 	public Film getFilm(int id) {
-		if (filmRepository.exists(id))
-			return filmRepository.findFilmById(id);
-		return null;
+		return filmRepository.findFilmById(id);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Genre> getFilmGenres(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findFilmGenres(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findFilmGenres(id, pageRequest);
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Country> getFilmCountries(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findFilmCountries(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findFilmCountries(id, pageRequest);
 	}
 	
 	@Override
@@ -69,41 +61,29 @@ public class FilmServiceImpl implements FilmService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Person> getFilmWriters(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findFilmWriters(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findFilmWriters(id, pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Person> getFilmProducers(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findFilmProducers(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findFilmProducers(id, pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Person> getFilmDirectors(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findFilmDirectors(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findFilmDirectors(id, pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Person> getFilmActors(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findFilmActors(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findFilmActors(id, pageRequest);
 	}
 
 	@Override
@@ -115,27 +95,15 @@ public class FilmServiceImpl implements FilmService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<RatingFilm> getAllRating(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findAllRating(id, pageRequest);
-		}
-		return null;
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findAllRating(id, pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<FilmReviews> getAllReview(int id, int page, int size) {
-		if (filmRepository.exists(id)) {
-			Pageable pageRequest = new PageRequest(page, size);
-			return filmRepository.findAllReview(id, pageRequest);
-		}
-		return null;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public RatingFilm getFilmRatingOfUser(int idFilm, int idUser) {
-		return filmRepository.findRatingOfUser(idFilm, idUser);
+		Pageable pageRequest = new PageRequest(page, size);
+		return filmRepository.findAllReview(id, pageRequest);
 	}
 
 }

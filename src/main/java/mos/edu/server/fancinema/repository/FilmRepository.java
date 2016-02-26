@@ -114,13 +114,4 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 	@Query(FIND_ALL_REVIEWS)
 	Page<FilmReviews> findAllReview(@Param("id") int id, Pageable pageRequest);
 	
-	String FIND_RATING_FILM_OF_USER = 
-		"SELECT new RatingFilm(ratingFilm.rating) " + 
-		"FROM RatingFilm ratingFilm " + 
-		"WHERE ratingFilm.ratingFilmKey.idFilm = :idFilm " + 
-		"AND " +
-		"ratingFilm.ratingFilmKey.idUser = :idUser";
-	@Query(FIND_RATING_FILM_OF_USER)
-	RatingFilm findRatingOfUser(@Param("idFilm") int idFilm, @Param("idUser") int idUser);
-	
 }

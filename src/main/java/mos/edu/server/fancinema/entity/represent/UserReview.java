@@ -1,6 +1,4 @@
-package mos.edu.server.fancinema.entity;
-
-import java.io.Serializable;
+package mos.edu.server.fancinema.entity.represent;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -12,15 +10,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import mos.edu.server.fancinema.Constants;
+import mos.edu.server.fancinema.entity.Review;
+import mos.edu.server.fancinema.entity.User;
 import mos.edu.server.fancinema.entity.composite_key.ReviewKey;
 
 @Entity
 @Table(name = Constants.TABLE_REVIEWS)
-public class Review implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class UserReview {
 
-	public static final String COLUMN_REVIEW = "review";
-	
 	@JsonIgnore
 	@EmbeddedId
 	private ReviewKey reviewKey;
@@ -30,16 +27,15 @@ public class Review implements Serializable {
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private User user;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "film_id", insertable = false, updatable = false)
-	private Film film;
+	private ShortFilm film;
 	
-	@Column(name = COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
+	@Column(name = Review.COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
 	private String review;
 	
-	protected Review() {}
-
+	protected UserReview() {}
+	
 	public ReviewKey getReviewKey() {
 		return reviewKey;
 	}
@@ -47,20 +43,12 @@ public class Review implements Serializable {
 	public void setReviewKey(ReviewKey reviewKey) {
 		this.reviewKey = reviewKey;
 	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Film getFilm() {
+	
+	public ShortFilm getFilm() {
 		return film;
 	}
 
-	public void setFilm(Film film) {
+	public void setFilm(ShortFilm film) {
 		this.film = film;
 	}
 
