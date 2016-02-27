@@ -43,7 +43,6 @@ public class User implements Serializable {
 	@Column(name = COLUMN_LOGIN, length = 15, nullable = false)
 	private String login;
 	
-	@JsonIgnore
 	@Column(name = COLUMN_PASSWORD, length = 32, nullable = false)
 	private String password;
 	
@@ -89,9 +88,9 @@ public class User implements Serializable {
 		this.login = login;
 	}
 
-	public String getPassword() {
+	/*public String getPassword() {
 		return password;
-	}
+	}*/
 
 	public void setPassword(String password) {
 		this.password = password;

@@ -13,7 +13,7 @@ import mos.edu.server.fancinema.entity.Genre;
 import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 import mos.edu.server.fancinema.entity.represent.Creators;
-import mos.edu.server.fancinema.entity.represent.FilmReviews;
+import mos.edu.server.fancinema.entity.represent.FilmReview;
 import mos.edu.server.fancinema.entity.represent.Rating;
 import mos.edu.server.fancinema.entity.represent.ShortFilm;
 
@@ -41,7 +41,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 		"SELECT genres " + 
 		"FROM Film film " + 
 		"JOIN film.genres genres " + 
-		"ON film.idFilm = :id";
+		"WHERE film.idFilm = :id";
 	@Query(FIND_FILM_GENRES)
 	Page<Genre> findFilmGenres(@Param("id") int id, Pageable pageRequest);
 	
@@ -49,7 +49,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 		"SELECT countries " + 
 		"FROM Film film " + 
 		"JOIN film.countries countries " + 
-		"ON film.idFilm = :id";
+		"WHERE film.idFilm = :id";
 	@Query(FIND_FILM_COUNTRIES)
 	Page<Country> findFilmCountries(@Param("id") int id, Pageable pageRequest);
 	
@@ -64,7 +64,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 		"SELECT writers " + 
 		"FROM Film film " + 
 		"JOIN film.writers writers " + 
-		"ON film.idFilm = :id";
+		"WHERE film.idFilm = :id";
 	@Query(FIND_FILM_WRITERS)
 	Page<Person> findFilmWriters(@Param("id") int id, Pageable pageRequest);
 	
@@ -72,7 +72,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 		"SELECT producers " + 
 		"FROM Film film " + 
 		"JOIN film.producers producers " + 
-		"ON film.idFilm = :id";
+		"WHERE film.idFilm = :id";
 	@Query(FIND_FILM_PRODUCERS)
 	Page<Person> findFilmProducers(@Param("id") int id, Pageable pageRequest);
 	
@@ -80,7 +80,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 		"SELECT directors " + 
 		"FROM Film film " + 
 		"JOIN film.directors directors " + 
-		"ON film.idFilm = :id";
+		"WHERE film.idFilm = :id";
 	@Query(FIND_FILM_DIRECTORS)
 	Page<Person> findFilmDirectors(@Param("id") int id, Pageable pageRequest);
 	
@@ -88,7 +88,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 		"SELECT actors " + 
 		"FROM Film film " + 
 		"JOIN film.actors actors " + 
-		"ON film.idFilm = :id";
+		"WHERE film.idFilm = :id";
 	@Query(FIND_FILM_ACTORS)
 	Page<Person> findFilmActors(@Param("id") int id, Pageable pageRequest);
 	
@@ -109,9 +109,9 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 	
 	String FIND_ALL_REVIEWS = 
 			"SELECT review " + 
-			"FROM FilmReviews review " + 
+			"FROM FilmReview review " + 
 			"WHERE review.reviewKey.idFilm = :id";
 	@Query(FIND_ALL_REVIEWS)
-	Page<FilmReviews> findAllReview(@Param("id") int id, Pageable pageRequest);
+	Page<FilmReview> findAllReview(@Param("id") int id, Pageable pageRequest);
 	
 }

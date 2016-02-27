@@ -40,6 +40,12 @@ public class Favorite implements Serializable {
 	
 	protected Favorite() {}
 	
+	public Favorite(FavoriteKey favoriteKey, boolean looked) {
+		super();
+		this.favoriteKey = favoriteKey;
+		this.looked = looked;
+	}
+
 	public FavoriteKey getFavoriteKey() {
 		return favoriteKey;
 	}

@@ -52,7 +52,10 @@ public class UserController {
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<User>> addUser(@RequestBody User user) {
-		return null;
+		User addedUser = userService.addUser(user);
+		if(addedUser != null)
+			return getUser(user.getIdUser());
+		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
@@ -74,9 +77,12 @@ public class UserController {
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<RatingFilm>> addUserRatingForFilm(@PathVariable(value = "id_user") int idUser,
-												  	  			 @PathVariable(value = "id_film") int idFilm,
-												  	  			 @RequestBody RatingFilm filmRating) {
-		return null;
+											  	  			 	 @PathVariable(value = "id_film") int idFilm,
+											  	  			 	 @RequestParam(value = "value") byte value) {
+		RatingFilm addedRatingFilm = userService.addUserRatingForFilm(idUser, idFilm, value);
+		if (addedRatingFilm != null) 
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
@@ -114,7 +120,10 @@ public class UserController {
 	public HttpEntity<Resource<Review>> addUserReviewForFilm(@PathVariable(value = "id_user") int idUser,
 													  		 @PathVariable(value = "id_film") int idFilm,
 													  		 @RequestBody Review review) {
-		return null;
+		Review addedReview = userService.addUserReview(idUser, idFilm, review);
+		if (addedReview != null) 
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
@@ -179,10 +188,13 @@ public class UserController {
 					value = Constants.URI_USER_FILM_FAVORITE,
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public HttpEntity<Resource<Favorite>> addUserFavorite(@PathVariable(value = "id_user") int idUser,
-													      @PathVariable(value = "id_film") int idFilm,
-													      @RequestBody Favorite favorite) {
-		return null;
+	public HttpEntity<PagedResources<UserFavorite>> addUserFavorite(@PathVariable(value = "id_user") int idUser,
+															        @PathVariable(value = "id_film") int idFilm,
+															        @RequestParam(value = "looked", required = false, defaultValue = "0") boolean looked) {
+		Favorite addedFavorite = userService.addUserFavorite(idUser, idFilm, looked);
+		if (addedFavorite != null)
+			return getUserFavorite(idUser, 0, 30);
+		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 	}
 	
 }

@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.Review;
 import mos.edu.server.fancinema.entity.User;
@@ -14,8 +16,9 @@ import mos.edu.server.fancinema.entity.composite_key.ReviewKey;
 
 @Entity
 @Table(name = Constants.TABLE_REVIEWS)
-public class FilmReviews {
+public class FilmReview {
 
+	@JsonIgnore
 	@EmbeddedId
 	private ReviewKey reviewKey;
 	
@@ -26,7 +29,7 @@ public class FilmReviews {
 	@Column(name = Review.COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
 	private String review;
 	
-	protected FilmReviews() {}
+	protected FilmReview() {}
 	
 	public ReviewKey getReviewKey() {
 		return reviewKey;

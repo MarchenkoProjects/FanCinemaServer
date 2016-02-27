@@ -8,7 +8,7 @@ import mos.edu.server.fancinema.entity.Genre;
 import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 import mos.edu.server.fancinema.entity.represent.Creators;
-import mos.edu.server.fancinema.entity.represent.FilmReviews;
+import mos.edu.server.fancinema.entity.represent.FilmReview;
 import mos.edu.server.fancinema.entity.represent.Rating;
 import mos.edu.server.fancinema.entity.represent.ShortFilm;
 
@@ -29,6 +29,6 @@ public interface FilmService {
 	Rating getFilmRating(int id);
 	Page<RatingFilm> getAllRating(int id, int page, int size);
 	
-	Page<FilmReviews> getAllReview(int id, int page, int size);
+	Page<FilmReview> getAllReview(int id, int page, int size);
 	
 }

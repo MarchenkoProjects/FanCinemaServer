@@ -1,9 +1,8 @@
 package mos.edu.server.fancinema;
 
 public final class Constants {
-
-	public static final String DATABASE_NAME = "test_fan_cinema_bd";
 	
+	// Tables
 	public static final String TABLE_FILMS = "films";
 	public static final String TABLE_GENRES = "genres";
 	public static final String TABLE_COUNTRIES = "countries";

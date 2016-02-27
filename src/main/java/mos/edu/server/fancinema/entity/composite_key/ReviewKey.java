@@ -21,7 +21,6 @@ public class ReviewKey implements Serializable {
 	protected ReviewKey() {}
 
 	public ReviewKey(int idUser, int idFilm) {
-		super();
 		this.idUser = idUser;
 		this.idFilm = idFilm;
 	}

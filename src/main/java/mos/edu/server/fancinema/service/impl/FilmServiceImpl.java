@@ -13,7 +13,7 @@ import mos.edu.server.fancinema.entity.Genre;
 import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 import mos.edu.server.fancinema.entity.represent.Creators;
-import mos.edu.server.fancinema.entity.represent.FilmReviews;
+import mos.edu.server.fancinema.entity.represent.FilmReview;
 import mos.edu.server.fancinema.entity.represent.Rating;
 import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.repository.FilmRepository;
@@ -101,7 +101,7 @@ public class FilmServiceImpl implements FilmService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<FilmReviews> getAllReview(int id, int page, int size) {
+	public Page<FilmReview> getAllReview(int id, int page, int size) {
 		Pageable pageRequest = new PageRequest(page, size);
 		return filmRepository.findAllReview(id, pageRequest);
 	}

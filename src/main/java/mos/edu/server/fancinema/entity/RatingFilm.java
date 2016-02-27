@@ -42,6 +42,11 @@ public class RatingFilm implements Serializable {
 	
 	protected RatingFilm() {}
 	
+	public RatingFilm(RatingFilmKey ratingFilmKey, byte rating) {
+		this.ratingFilmKey = ratingFilmKey;
+		this.rating = rating;
+	}
+
 	public RatingFilm(byte rating) {
 		this.rating = rating;
 	}

@@ -25,7 +25,7 @@ import mos.edu.server.fancinema.entity.Genre;
 import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 import mos.edu.server.fancinema.entity.represent.Creators;
-import mos.edu.server.fancinema.entity.represent.FilmReviews;
+import mos.edu.server.fancinema.entity.represent.FilmReview;
 import mos.edu.server.fancinema.entity.represent.Rating;
 import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.service.FilmService;
@@ -301,16 +301,16 @@ public class FilmController {
 	@RequestMapping(method = RequestMethod.GET,
 					value = Constants.URI_FILM_REVIEWS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public HttpEntity<PagedResources<FilmReviews>> getAllReview(@PathVariable(value = "id_film") int id,
-															   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
-															   @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
+	public HttpEntity<PagedResources<FilmReview>> getAllReview(@PathVariable(value = "id_film") int id,
+															    @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
+															    @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
 		if (page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<FilmReviews> reviews = filmService.getAllReview(id, page, size);
+		Page<FilmReview> reviews = filmService.getAllReview(id, page, size);
 		if (reviews != null && reviews.hasContent()) {
 			PageMetadata metadata = new PageMetadata(reviews.getSize(), reviews.getNumber(), reviews.getTotalElements(), reviews.getTotalPages());
-			PagedResources<FilmReviews> ratingResources = new PagedResources<>(reviews.getContent(), metadata);
+			PagedResources<FilmReview> ratingResources = new PagedResources<>(reviews.getContent(), metadata);
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
