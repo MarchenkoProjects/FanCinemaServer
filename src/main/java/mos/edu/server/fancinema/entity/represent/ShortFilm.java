@@ -22,7 +22,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import mos.edu.server.fancinema.Constants;
+import mos.edu.server.fancinema.entity.Country;
 import mos.edu.server.fancinema.entity.Film;
+import mos.edu.server.fancinema.entity.Genre;
 import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 
@@ -51,6 +53,18 @@ public class ShortFilm {
 	
 	@Transient
 	private Rating rating;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = Constants.JOIN_TABLE_FILM_GENRE,
+			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
+			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_GENRE_ID, referencedColumnName = Genre.COLUMN_ID_GENRE))
+	private Set<Genre> genres;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = Constants.JOIN_TABLE_FILM_COUNTRY,
+			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
+			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_COUNTRY_ID, referencedColumnName = Country.COLUMN_ID_COUNTRY))
+	private Set<Country> countries;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = Constants.JOIN_TABLE_FILM_WRITER,

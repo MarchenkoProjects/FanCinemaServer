@@ -11,6 +11,7 @@ import mos.edu.server.fancinema.entity.represent.UserReview;
 
 public interface UserService {
 
+	Page<User> getUsers(int page, int size);
 	User getUserById(int id);
 	User addUser(User user);
 	

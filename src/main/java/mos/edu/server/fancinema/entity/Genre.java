@@ -30,7 +30,7 @@ public class Genre implements Serializable {
 	public static final String COLUMN_GENRE_EN = "genre_en";
 	public static final String COLUMN_GENRE_RU = "genre_ru";
 	
-	private static final String GENRES_MAPPED_FILMS = "genres";
+	public static final String GENRES_MAPPED_FILMS = "genres";
 	
 	@Id
 	@GeneratedValue(generator = "increment")

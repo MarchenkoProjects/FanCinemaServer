@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mos.edu.server.fancinema.entity.Country;
+import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.repository.CountryRepository;
 import mos.edu.server.fancinema.service.CountryService;
 
@@ -22,6 +23,13 @@ public class CountryServiceImpl implements CountryService {
 	public Page<Country> getCountries(int page, int size) {
 		Pageable pageRequest = new PageRequest(page, size);
 		return countryRepository.findAll(pageRequest);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<ShortFilm> getFilmsOfCountry(short id, int page, int size) {
+		Pageable pageRequest = new PageRequest(page, size);
+		return countryRepository.findFilmsOfCountry(id, pageRequest);
 	}
 
 }

@@ -40,18 +40,18 @@ public class PersonController {
 		Page<Person> persons = personService.getPersons(page, size);
 		if (persons.hasContent()) {
 			PageMetadata metadata = new PageMetadata(persons.getSize(), persons.getNumber(), persons.getTotalElements(), persons.getTotalPages());
-			PagedResources<Person> personResources = new PagedResources<>(persons.getContent(), metadata);
+			PagedResources<Person> personsResource = new PagedResources<>(persons.getContent(), metadata);
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				personResources.add(linkTo(methodOn(PersonController.class).getPersons(prev_page, size)).withRel("prev"));
-			personResources.add(linkTo(methodOn(PersonController.class).getPersons(page, size)).withSelfRel());
+				personsResource.add(linkTo(methodOn(PersonController.class).getPersons(prev_page, size)).withRel("prev"));
+			personsResource.add(linkTo(methodOn(PersonController.class).getPersons(page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = persons.getTotalPages();
-			if (next_page != last_page)
-				personResources.add(linkTo(methodOn(PersonController.class).getPersons(next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				personsResource.add(linkTo(methodOn(PersonController.class).getPersons(next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(personResources, HttpStatus.OK);
+			return new ResponseEntity<>(personsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -62,9 +62,10 @@ public class PersonController {
 	public HttpEntity<Resource<Person>> getPerson(@PathVariable(value = "id_person") int id) {
 		Person person = personService.getPerson(id);
 		if (person != null) {
-			Resource<Person> filmResource = new Resource<>(person);
-			filmResource.add(linkTo(methodOn(PersonController.class).getPerson(id)).withSelfRel());
-			return new ResponseEntity<>(filmResource, HttpStatus.OK);
+			Resource<Person> personResource = new Resource<>(person);
+			personResource.add(linkTo(methodOn(PersonController.class).getPerson(id)).withSelfRel());
+			personResource.add(linkTo(methodOn(PersonController.class).getFilmsOfPerson(id)).withRel("films"));
+			return new ResponseEntity<>(personResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -77,6 +78,7 @@ public class PersonController {
 		FilmsPerson filmsPerson = personService.getFilmsOfPerson(id);
 		if (filmsPerson != null) {
 			Resource<FilmsPerson> filmsPersonResource = new Resource<>(filmsPerson);
+			filmsPersonResource.add(linkTo(methodOn(PersonController.class).getPerson(id)).withRel("self-person"));
 			filmsPersonResource.add(linkTo(methodOn(PersonController.class).getFilmsOfPerson(id)).withSelfRel());
 			return new ResponseEntity<>(filmsPersonResource, HttpStatus.OK);
 		}

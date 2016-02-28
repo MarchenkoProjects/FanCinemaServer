@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import mos.edu.server.fancinema.entity.Genre;
+import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.repository.GenreRepository;
 import mos.edu.server.fancinema.service.GenreService;
 
@@ -22,6 +23,13 @@ public class GenreServiceImpl implements GenreService {
 	public Page<Genre> getGenres(int page, int size) {
 		Pageable pageRequest = new PageRequest(page, size);
 		return genreRepository.findAll(pageRequest);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<ShortFilm> getFilmsOfGenre(byte id, int page, int size) {
+		Pageable pageRequest = new PageRequest(page, size);
+		return genreRepository.findFilmsOfGenre(id, pageRequest);
 	}
 
 }

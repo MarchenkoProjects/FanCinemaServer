@@ -47,18 +47,18 @@ public class FilmController {
 		Page<ShortFilm> films = filmService.getFilms(page, size);
 		if (films.hasContent()) {
 			PageMetadata metadata = new PageMetadata(films.getSize(), films.getNumber(), films.getTotalElements(), films.getTotalPages());
-			PagedResources<ShortFilm> filmResources = new PagedResources<>(films.getContent(), metadata);
+			PagedResources<ShortFilm> filmsResource = new PagedResources<>(films.getContent(), metadata);
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				filmResources.add(linkTo(methodOn(FilmController.class).getFilms(prev_page, size)).withRel("prev"));
-			filmResources.add(linkTo(methodOn(FilmController.class).getFilms(page, size)).withSelfRel());
+				filmsResource.add(linkTo(methodOn(FilmController.class).getFilms(prev_page, size)).withRel("prev"));
+			filmsResource.add(linkTo(methodOn(FilmController.class).getFilms(page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = films.getTotalPages();
-			if (next_page != last_page)
-				filmResources.add(linkTo(methodOn(FilmController.class).getFilms(next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				filmsResource.add(linkTo(methodOn(FilmController.class).getFilms(next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(filmResources, HttpStatus.OK);
+			return new ResponseEntity<>(filmsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -71,6 +71,16 @@ public class FilmController {
 		if (film != null) {
 			Resource<Film> filmResource = new Resource<>(film);
 			filmResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withSelfRel());
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, 0, 10)).withRel("genres"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, 0, 10)).withRel("countries"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmCreators(id)).withRel("creators"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, 0, 20)).withRel("writers"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, 0, 20)).withRel("producers"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, 0, 20)).withRel("directors"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmActors(id, 0, 20)).withRel("actors"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmRating(id)).withRel("rating"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmRatings(id, 0, 30)).withRel("ratings"));
+			filmResource.add(linkTo(methodOn(FilmController.class).getFilmReviews(id, 0, 30)).withRel("reviews"));
 			return new ResponseEntity<>(filmResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -88,18 +98,19 @@ public class FilmController {
 		Page<Genre> genres = filmService.getFilmGenres(id, page, size);
 		if (genres != null && genres.hasContent()) {
 			PageMetadata metadata = new PageMetadata(genres.getSize(), genres.getNumber(), genres.getTotalElements(), genres.getTotalPages());
-			PagedResources<Genre> genreResources = new PagedResources<>(genres.getContent(), metadata);
+			PagedResources<Genre> genresResource = new PagedResources<>(genres.getContent(), metadata);
+			genresResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				genreResources.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, prev_page, size)).withRel("prev"));
-			genreResources.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, page, size)).withSelfRel());
+				genresResource.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, prev_page, size)).withRel("prev"));
+			genresResource.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = genres.getTotalPages();
-			if (next_page != last_page)
-				genreResources.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				genresResource.add(linkTo(methodOn(FilmController.class).getFilmGenres(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(genreResources, HttpStatus.OK);
+			return new ResponseEntity<>(genresResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -116,18 +127,19 @@ public class FilmController {
 		Page<Country> countries = filmService.getFilmCountries(id, page, size);
 		if (countries != null && countries.hasContent()) {
 			PageMetadata metadata = new PageMetadata(countries.getSize(), countries.getNumber(), countries.getTotalElements(), countries.getTotalPages());
-			PagedResources<Country> countryResources = new PagedResources<>(countries.getContent(), metadata);
+			PagedResources<Country> countriesResource = new PagedResources<>(countries.getContent(), metadata);
+			countriesResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				countryResources.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, prev_page, size)).withRel("prev"));
-			countryResources.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, page, size)).withSelfRel());
+				countriesResource.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, prev_page, size)).withRel("prev"));
+			countriesResource.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = countries.getTotalPages();
-			if (next_page != last_page)
-				countryResources.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				countriesResource.add(linkTo(methodOn(FilmController.class).getFilmCountries(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(countryResources, HttpStatus.OK);
+			return new ResponseEntity<>(countriesResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -139,7 +151,12 @@ public class FilmController {
 		Creators creators = filmService.getFilmCreators(id);
 		if (creators != null) {
 			Resource<Creators> creatorsResource = new Resource<>(creators);
+			creatorsResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
 			creatorsResource.add(linkTo(methodOn(FilmController.class).getFilmCreators(id)).withSelfRel());
+			creatorsResource.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, 0, 20)).withRel("writers"));
+			creatorsResource.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, 0, 20)).withRel("producers"));
+			creatorsResource.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, 0, 20)).withRel("directors"));
+			creatorsResource.add(linkTo(methodOn(FilmController.class).getFilmActors(id, 0, 20)).withRel("actors"));
 			return new ResponseEntity<>(creatorsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -157,18 +174,20 @@ public class FilmController {
 		Page<Person> writers = filmService.getFilmWriters(id, page, size);
 		if (writers != null && writers.hasContent()) {
 			PageMetadata metadata = new PageMetadata(writers.getSize(), writers.getNumber(), writers.getTotalElements(), writers.getTotalPages());
-			PagedResources<Person> writersResources = new PagedResources<>(writers.getContent(), metadata);
+			PagedResources<Person> writersResource = new PagedResources<>(writers.getContent(), metadata);
+			writersResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
+			writersResource.add(linkTo(methodOn(FilmController.class).getFilmCreators(id)).withRel("creators"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				writersResources.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, prev_page, size)).withRel("prev"));
-			writersResources.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, page, size)).withSelfRel());
+				writersResource.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, prev_page, size)).withRel("prev"));
+			writersResource.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = writers.getTotalPages();
-			if (next_page != last_page)
-				writersResources.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				writersResource.add(linkTo(methodOn(FilmController.class).getFilmWriters(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(writersResources, HttpStatus.OK);
+			return new ResponseEntity<>(writersResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -185,18 +204,20 @@ public class FilmController {
 		Page<Person> producers = filmService.getFilmProducers(id, page, size);
 		if (producers != null && producers.hasContent()) {
 			PageMetadata metadata = new PageMetadata(producers.getSize(), producers.getNumber(), producers.getTotalElements(), producers.getTotalPages());
-			PagedResources<Person> prodecersResources = new PagedResources<>(producers.getContent(), metadata);
+			PagedResources<Person> producersResource = new PagedResources<>(producers.getContent(), metadata);
+			producersResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
+			producersResource.add(linkTo(methodOn(FilmController.class).getFilmCreators(id)).withRel("creators"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				prodecersResources.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, prev_page, size)).withRel("prev"));
-			prodecersResources.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, page, size)).withSelfRel());
+				producersResource.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, prev_page, size)).withRel("prev"));
+			producersResource.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = producers.getTotalPages();
-			if (next_page != last_page)
-				prodecersResources.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				producersResource.add(linkTo(methodOn(FilmController.class).getFilmProducers(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(prodecersResources, HttpStatus.OK);
+			return new ResponseEntity<>(producersResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -213,18 +234,20 @@ public class FilmController {
 		Page<Person> directors = filmService.getFilmDirectors(id, page, size);
 		if (directors != null && directors.hasContent()) {
 			PageMetadata metadata = new PageMetadata(directors.getSize(), directors.getNumber(), directors.getTotalElements(), directors.getTotalPages());
-			PagedResources<Person> directorsResources = new PagedResources<>(directors.getContent(), metadata);
+			PagedResources<Person> directorsResource = new PagedResources<>(directors.getContent(), metadata);
+			directorsResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
+			directorsResource.add(linkTo(methodOn(FilmController.class).getFilmCreators(id)).withRel("creators"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				directorsResources.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, prev_page, size)).withRel("prev"));
-			directorsResources.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, page, size)).withSelfRel());
+				directorsResource.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, prev_page, size)).withRel("prev"));
+			directorsResource.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = directors.getTotalPages();
-			if (next_page != last_page)
-				directorsResources.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				directorsResource.add(linkTo(methodOn(FilmController.class).getFilmDirectors(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(directorsResources, HttpStatus.OK);
+			return new ResponseEntity<>(directorsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -241,18 +264,20 @@ public class FilmController {
 		Page<Person> actors = filmService.getFilmActors(id, page, size);
 		if (actors != null && actors.hasContent()) {
 			PageMetadata metadata = new PageMetadata(actors.getSize(), actors.getNumber(), actors.getTotalElements(), actors.getTotalPages());
-			PagedResources<Person> actorsResources = new PagedResources<>(actors.getContent(), metadata);
+			PagedResources<Person> actorsResource = new PagedResources<>(actors.getContent(), metadata);
+			actorsResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
+			actorsResource.add(linkTo(methodOn(FilmController.class).getFilmCreators(id)).withRel("creators"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				actorsResources.add(linkTo(methodOn(FilmController.class).getFilmActors(id, prev_page, size)).withRel("prev"));
-			actorsResources.add(linkTo(methodOn(FilmController.class).getFilmActors(id, page, size)).withSelfRel());
+				actorsResource.add(linkTo(methodOn(FilmController.class).getFilmActors(id, prev_page, size)).withRel("prev"));
+			actorsResource.add(linkTo(methodOn(FilmController.class).getFilmActors(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = actors.getTotalPages();
-			if (next_page != last_page)
-				actorsResources.add(linkTo(methodOn(FilmController.class).getFilmActors(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				actorsResource.add(linkTo(methodOn(FilmController.class).getFilmActors(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(actorsResources, HttpStatus.OK);
+			return new ResponseEntity<>(actorsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -263,9 +288,11 @@ public class FilmController {
 	public HttpEntity<Resource<Rating>> getFilmRating(@PathVariable(value = "id_film") int id) {
 		Rating filmRating = filmService.getFilmRating(id);
 		if (filmRating != null) {
-			Resource<Rating> actorsResource = new Resource<>(filmRating);
-			actorsResource.add(linkTo(methodOn(FilmController.class).getFilmRating(id)).withSelfRel());
-			return new ResponseEntity<>(actorsResource, HttpStatus.OK);
+			Resource<Rating> ratingResource = new Resource<>(filmRating);
+			ratingResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
+			ratingResource.add(linkTo(methodOn(FilmController.class).getFilmRating(id)).withSelfRel());
+			ratingResource.add(linkTo(methodOn(FilmController.class).getFilmRatings(id, 0, 30)).withRel("ratings"));
+			return new ResponseEntity<>(ratingResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -273,7 +300,7 @@ public class FilmController {
 	@RequestMapping(method = RequestMethod.GET,
 					value = Constants.URI_FILM_RATINGS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public HttpEntity<PagedResources<RatingFilm>> getAllRating(@PathVariable(value = "id_film") int id,
+	public HttpEntity<PagedResources<RatingFilm>> getFilmRatings(@PathVariable(value = "id_film") int id,
 															   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 															   @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
 		if (page < 0 || size <= 0) 
@@ -282,18 +309,20 @@ public class FilmController {
 		Page<RatingFilm> ratings = filmService.getAllRating(id, page, size);
 		if (ratings != null && ratings.hasContent()) {
 			PageMetadata metadata = new PageMetadata(ratings.getSize(), ratings.getNumber(), ratings.getTotalElements(), ratings.getTotalPages());
-			PagedResources<RatingFilm> ratingResources = new PagedResources<>(ratings.getContent(), metadata);
+			PagedResources<RatingFilm> ratingsResource = new PagedResources<>(ratings.getContent(), metadata);
+			ratingsResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
+			ratingsResource.add(linkTo(methodOn(FilmController.class).getFilmRating(id)).withRel("rating"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				ratingResources.add(linkTo(methodOn(FilmController.class).getAllRating(id, prev_page, size)).withRel("prev"));
-			ratingResources.add(linkTo(methodOn(FilmController.class).getAllRating(id, page, size)).withSelfRel());
+				ratingsResource.add(linkTo(methodOn(FilmController.class).getFilmRatings(id, prev_page, size)).withRel("prev"));
+			ratingsResource.add(linkTo(methodOn(FilmController.class).getFilmRatings(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = ratings.getTotalPages();
-			if (next_page != last_page)
-				ratingResources.add(linkTo(methodOn(FilmController.class).getAllRating(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				ratingsResource.add(linkTo(methodOn(FilmController.class).getFilmRatings(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(ratingResources, HttpStatus.OK);
+			return new ResponseEntity<>(ratingsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -301,7 +330,7 @@ public class FilmController {
 	@RequestMapping(method = RequestMethod.GET,
 					value = Constants.URI_FILM_REVIEWS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public HttpEntity<PagedResources<FilmReview>> getAllReview(@PathVariable(value = "id_film") int id,
+	public HttpEntity<PagedResources<FilmReview>> getFilmReviews(@PathVariable(value = "id_film") int id,
 															    @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 															    @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
 		if (page < 0 || size <= 0) 
@@ -310,18 +339,19 @@ public class FilmController {
 		Page<FilmReview> reviews = filmService.getAllReview(id, page, size);
 		if (reviews != null && reviews.hasContent()) {
 			PageMetadata metadata = new PageMetadata(reviews.getSize(), reviews.getNumber(), reviews.getTotalElements(), reviews.getTotalPages());
-			PagedResources<FilmReview> ratingResources = new PagedResources<>(reviews.getContent(), metadata);
+			PagedResources<FilmReview> reviewsResource = new PagedResources<>(reviews.getContent(), metadata);
+			reviewsResource.add(linkTo(methodOn(FilmController.class).getFilm(id)).withRel("self-film"));
 			
 			int prev_page = page - 1;
 			if (prev_page >= 0)
-				ratingResources.add(linkTo(methodOn(FilmController.class).getAllReview(id, prev_page, size)).withRel("prev"));
-			ratingResources.add(linkTo(methodOn(FilmController.class).getAllReview(id, page, size)).withSelfRel());
+				reviewsResource.add(linkTo(methodOn(FilmController.class).getFilmReviews(id, prev_page, size)).withRel("prev"));
+			reviewsResource.add(linkTo(methodOn(FilmController.class).getFilmReviews(id, page, size)).withSelfRel());
 			int next_page = page + 1;
 			long last_page = reviews.getTotalPages();
-			if (next_page != last_page)
-				ratingResources.add(linkTo(methodOn(FilmController.class).getAllReview(id, next_page, size)).withRel("next"));
+			if (next_page < last_page)
+				reviewsResource.add(linkTo(methodOn(FilmController.class).getFilmReviews(id, next_page, size)).withRel("next"));
 			
-			return new ResponseEntity<>(ratingResources, HttpStatus.OK);
+			return new ResponseEntity<>(reviewsResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

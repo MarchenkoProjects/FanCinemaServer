@@ -39,6 +39,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional(readOnly = true)
+	public Page<User> getUsers(int page, int size) {
+		Pageable pageRequest = new PageRequest(page, size);
+		return userRepository.findAll(pageRequest);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
 	public User getUserById(int id) {
 		return userRepository.findOne(id);
 	}

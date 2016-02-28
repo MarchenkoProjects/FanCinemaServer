@@ -41,7 +41,9 @@ public final class Constants {
 	public static final String URI_FILM_REVIEWS = "/{id_film}/reviews";
 	
 	public static final String URI_GENRES = "/genres";
+	public static final String URI_GENRE_FILMS = "/{id_genre}/films";
 	public static final String URI_COUNTRIES = "/countries";
+	public static final String URI_COUNTRY_FILMS = "/{id_country}/films";
 	
 	public static final String URI_PERSONS = "/persons";
 	public static final String URI_PERSON_BY_ID = "/{id_person}";
