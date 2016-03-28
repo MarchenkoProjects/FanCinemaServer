@@ -13,6 +13,7 @@ public interface UserService {
 
 	Page<User> getUsers(int page, int size);
 	User getUserById(int id);
+	User findUserByLogin(String login);
 	User addUser(User user);
 	
 	RatingFilm getUserRatingForFilm(int idUser, int idFilm);

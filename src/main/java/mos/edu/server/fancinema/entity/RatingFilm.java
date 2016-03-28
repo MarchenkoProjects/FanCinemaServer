@@ -17,7 +17,7 @@ import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.composite_key.RatingFilmKey;
 
 @Entity
-@Table(name = Constants.TABLE_RATING_FILM)
+@Table(name = Constants.TABLE.RATING_FILM)
 @JsonInclude(Include.NON_EMPTY)
 public class RatingFilm implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -81,6 +81,29 @@ public class RatingFilm implements Serializable {
 
 	public void setRating(byte rating) {
 		this.rating = rating;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.ratingFilmKey.hashCode();
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		RatingFilm ratingFilm = (RatingFilm) obj;
+		if (!this.ratingFilmKey.equals(ratingFilm.ratingFilmKey)) return false;
+		
+		return true;
 	}
 	
 }

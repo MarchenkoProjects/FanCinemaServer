@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import mos.edu.server.fancinema.Constants;
 
 @Entity
-@Table(name = Constants.TABLE_GENRES)
+@Table(name = Constants.TABLE.GENRES)
 @JsonInclude(Include.NON_EMPTY)
 public class Genre implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -80,6 +80,29 @@ public class Genre implements Serializable {
 
 	public void setFilms(Set<Film> films) {
 		this.films = films;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idGenre;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Genre genre = (Genre) obj;
+		if (this.idGenre != genre.idGenre) return false;
+		
+		return true;
 	}
 	
 }

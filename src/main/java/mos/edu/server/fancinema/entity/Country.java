@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import mos.edu.server.fancinema.Constants;
 
 @Entity
-@Table(name = Constants.TABLE_COUNTRIES)
+@Table(name = Constants.TABLE.COUNTRIES)
 public class Country implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -79,6 +79,29 @@ public class Country implements Serializable {
 
 	public void setFilms(Set<Film> films) {
 		this.films = films;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idCountry;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Country country = (Country) obj;
+		if (this.idCountry != country.idCountry) return false;
+		
+		return true;
 	}
 	
 }

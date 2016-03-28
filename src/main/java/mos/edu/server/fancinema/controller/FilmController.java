@@ -31,7 +31,7 @@ import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.service.FilmService;
 
 @RestController
-@RequestMapping(value = Constants.URI_FILMS)
+@RequestMapping(value = Constants.URI.FILMS)
 public class FilmController {
 
 	@Autowired
@@ -64,7 +64,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_BY_ID,
+					value = Constants.URI.FILM_BY_ID,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Film>> getFilm(@PathVariable(value = "id_film") int id) {
 		Film film = filmService.getFilm(id);
@@ -87,7 +87,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_GENRES,
+					value = Constants.URI.FILM_GENRES,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<Genre>> getFilmGenres(@PathVariable(value = "id_film") int id,
 													  	   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -116,7 +116,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_COUNTRIES,
+					value = Constants.URI.FILM_COUNTRIES,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<Country>> getFilmCountries(@PathVariable(value = "id_film") int id,
 														   		@RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -145,7 +145,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_CREATORS,
+					value = Constants.URI.FILM_CREATORS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Creators>> getFilmCreators(@PathVariable(value = "id_film") int id) {
 		Creators creators = filmService.getFilmCreators(id);
@@ -163,7 +163,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_WRITERS,
+					value = Constants.URI.FILM_WRITERS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<Person>> getFilmWriters(@PathVariable(value = "id_film") int id,
 															 @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -193,7 +193,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_PRODUCERS,
+					value = Constants.URI.FILM_PRODUCERS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<Person>> getFilmProducers(@PathVariable(value = "id_film") int id,
 															   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -223,7 +223,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_DIRECTORS,
+					value = Constants.URI.FILM_DIRECTORS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<Person>> getFilmDirectors(@PathVariable(value = "id_film") int id,
 															   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -253,7 +253,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_ACTORS,
+					value = Constants.URI.FILM_ACTORS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<Person>> getFilmActors(@PathVariable(value = "id_film") int id,
 														    @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -283,7 +283,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_RATING,
+					value = Constants.URI.FILM_RATING,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Rating>> getFilmRating(@PathVariable(value = "id_film") int id) {
 		Rating filmRating = filmService.getFilmRating(id);
@@ -298,7 +298,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_RATINGS,
+					value = Constants.URI.FILM_RATINGS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<RatingFilm>> getFilmRatings(@PathVariable(value = "id_film") int id,
 															   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -328,7 +328,7 @@ public class FilmController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_FILM_REVIEWS,
+					value = Constants.URI.FILM_REVIEWS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<FilmReview>> getFilmReviews(@PathVariable(value = "id_film") int id,
 															    @RequestParam(value = "page", required = false, defaultValue = "0") int page, 

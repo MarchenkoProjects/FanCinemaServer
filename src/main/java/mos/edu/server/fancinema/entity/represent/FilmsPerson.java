@@ -19,7 +19,7 @@ import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.Person;
 
 @Entity
-@Table(name = Constants.TABLE_PERSONALITY)
+@Table(name = Constants.TABLE.PERSONS)
 public class FilmsPerson {
 	
 	@Id
@@ -84,6 +84,29 @@ public class FilmsPerson {
 
 	public void setFilmActors(Set<ShortFilm> filmActors) {
 		this.filmActors = filmActors;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idPerson;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		FilmsPerson filmsPerson = (FilmsPerson) obj;
+		if (this.idPerson != filmsPerson.idPerson) return false;
+		
+		return true;
 	}
 	
 }

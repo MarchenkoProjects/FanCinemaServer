@@ -23,15 +23,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import mos.edu.server.fancinema.Constants;
 
 @Entity
-@Table(name = Constants.TABLE_PERSONALITY)
+@Table(name = Constants.TABLE.PERSONS)
 @JsonInclude(Include.NON_EMPTY)
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_PERSON = "id_person";
-	public static final String COLUMN_FULL_NAME = "full_name";
-	public static final String COLUMN_FIRST_NAME = "first_name";
-	public static final String COLUMN_LAST_NAME = "last_name";
+	public static final String COLUMN_ID_PERSON_KINOPOISK = "id_person_kinopoisk";
+	public static final String COLUMN_NAME_RU = "name_ru";
+	public static final String COLUMN_NAME_EN = "name_en";
 	public static final String COLUMN_WAS_BORN = "was_born";
 	public static final String COLUMN_BIOGRAPHY = "biography";
 	
@@ -46,19 +46,17 @@ public class Person implements Serializable {
 	@Column(name = COLUMN_ID_PERSON, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idPerson;
 	
+	@Column(name = COLUMN_ID_PERSON_KINOPOISK, nullable = true, columnDefinition = "BIGINT(20)")
+	private long idFilmKinopoisk;
+	
 	@Transient
 	private String fotoUrl;
 	
-	@Column(name = COLUMN_FULL_NAME, length = 30, nullable = false)
-	private String fullName;
+	@Column(name = COLUMN_NAME_RU, length = 30, nullable = false)
+	private String nameRu;
 	
-	@JsonIgnore
-	@Column(name = COLUMN_FIRST_NAME, length = 15, nullable = true)
-	private String firstName;
-	
-	@JsonIgnore
-	@Column(name = COLUMN_LAST_NAME, length = 15, nullable = true)
-	private String lastName;
+	@Column(name = COLUMN_NAME_EN, length = 15, nullable = true)
+	private String nameEn;
 	
 	@Column(name = COLUMN_WAS_BORN, nullable = true)
 	private Date wasBorn;
@@ -100,29 +98,21 @@ public class Person implements Serializable {
 	/*public void setFotoUrl(String fotoUrl) {
 		this.fotoUrl = fotoUrl;
 	}*/
-
-	public String getFullName() {
-		return fullName;
+	
+	public String getNameRu() {
+		return nameRu;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setNameRu(String nameRu) {
+		this.nameRu = nameRu;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getNameEn() {
+		return nameEn;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setNameEn(String nameEn) {
+		this.nameEn = nameEn;
 	}
 
 	public Date getWasBorn() {
@@ -171,6 +161,29 @@ public class Person implements Serializable {
 
 	public void setFilmActors(Set<Film> filmActors) {
 		this.filmActors = filmActors;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idPerson;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Person person = (Person) obj;
+		if (this.idPerson != person.idPerson) return false;
+		
+		return true;
 	}
 	
 }

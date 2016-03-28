@@ -51,6 +51,12 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
+	public User findUserByLogin(String login) {
+		return userRepository.findUserByLogin(login);
+	}
+	
+	@Override
 	@Transactional
 	public User addUser(User user) {
 		return userRepository.saveAndFlush(user);

@@ -26,12 +26,13 @@ import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.represent.Rating;
 
 @Entity
-@Table(name = Constants.TABLE_FILMS)
+@Table(name = Constants.TABLE.FILMS)
 @JsonInclude(Include.NON_EMPTY)
 public class Film implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String COLUMN_ID_FILM = "id_film";
+	public static final String COLUMN_ID_FILM_KINOPOISK = "id_film_kinopoisk";
 	public static final String COLUMN_ORIGINAL_NAME = "original_name";
 	public static final String COLUMN_ALTERNATIVE_NAME = "alternative_name";
 	public static final String COLUMN_YEAR = "year";
@@ -57,6 +58,9 @@ public class Film implements Serializable {
 	@GenericGenerator(name = "increment", strategy = "increment")
 	@Column(name = COLUMN_ID_FILM, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idFilm;
+	
+	@Column(name = COLUMN_ID_FILM_KINOPOISK, nullable = true, columnDefinition = "BIGINT(20)")
+	private long idFilmKinopoisk;
 	
 	@Transient
 	private String posterUrl;
@@ -89,37 +93,37 @@ public class Film implements Serializable {
 	private Rating rating;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_GENRE,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_GENRE,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_GENRE_ID, referencedColumnName = Genre.COLUMN_ID_GENRE))
 	private Set<Genre> genres;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_COUNTRY,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_COUNTRY,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_COUNTRY_ID, referencedColumnName = Country.COLUMN_ID_COUNTRY))
 	private Set<Country> countries;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_WRITER,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_WRITER,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_WRITER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> writers;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_PRODUCER,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_PRODUCER,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_PRODUCER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> producers;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_DIRECTOR,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_DIRECTOR,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_DIRECTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> directors;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_ACTOR,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_ACTOR,
 			   joinColumns = @JoinColumn(name = JOIN_COLUMN_FILM_ID, referencedColumnName = COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = JOIN_COLUMN_ACTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> actors;
@@ -325,6 +329,29 @@ public class Film implements Serializable {
 
 	public void setReviews(Set<Review> reviews) {
 		this.reviews = reviews;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idFilm;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Film film = (Film) obj;
+		if (this.idFilm != film.idFilm) return false;
+		
+		return true;
 	}
 	
 }

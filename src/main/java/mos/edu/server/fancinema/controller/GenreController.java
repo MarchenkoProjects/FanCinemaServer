@@ -23,7 +23,7 @@ import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.service.GenreService;
 
 @RestController
-@RequestMapping(value = Constants.URI_GENRES)
+@RequestMapping(value = Constants.URI.GENRES)
 public class GenreController {
 	
 	@Autowired
@@ -56,7 +56,7 @@ public class GenreController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_GENRE_FILMS,
+					value = Constants.URI.GENRE_FILMS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<ShortFilm>> getFilmsOfGenre(@PathVariable(value = "id_genre") byte id,
 																 @RequestParam(value = "page", required = false, defaultValue = "0") int page, 

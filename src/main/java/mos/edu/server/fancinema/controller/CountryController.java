@@ -23,7 +23,7 @@ import mos.edu.server.fancinema.entity.represent.ShortFilm;
 import mos.edu.server.fancinema.service.CountryService;
 
 @RestController
-@RequestMapping(value = Constants.URI_COUNTRIES)
+@RequestMapping(value = Constants.URI.COUNTRIES)
 public class CountryController {
 
 	@Autowired
@@ -56,7 +56,7 @@ public class CountryController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_COUNTRY_FILMS,
+					value = Constants.URI.COUNTRY_FILMS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<ShortFilm>> getFilmsOfCountry(@PathVariable(value = "id_country") short id,
 															 	   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 

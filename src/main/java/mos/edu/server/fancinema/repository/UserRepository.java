@@ -15,6 +15,8 @@ import mos.edu.server.fancinema.entity.represent.UserReview;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
+	User findUserByLogin(@Param("login") String login);
+	
 	String FIND_USER_RATING_FOR_FILM = 
 		"SELECT new RatingFilm(ratingFilm.rating) " + 
 		"FROM RatingFilm ratingFilm " + 

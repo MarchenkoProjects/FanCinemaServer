@@ -26,7 +26,7 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	@Override
 	protected String[] getServletMappings() {
 		String[] servletMappings = {
-			Constants.URI_HOME
+			Constants.URI.HOME
 		};
 		return servletMappings;
 	}

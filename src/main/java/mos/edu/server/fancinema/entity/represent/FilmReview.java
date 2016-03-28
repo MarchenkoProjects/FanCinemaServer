@@ -15,7 +15,7 @@ import mos.edu.server.fancinema.entity.User;
 import mos.edu.server.fancinema.entity.composite_key.ReviewKey;
 
 @Entity
-@Table(name = Constants.TABLE_REVIEWS)
+@Table(name = Constants.TABLE.REVIEWS)
 public class FilmReview {
 
 	@JsonIgnore
@@ -25,6 +25,9 @@ public class FilmReview {
 	@ManyToOne
 	@JoinColumn(name = "user_id", insertable = false, updatable = false)
 	private User user;
+	
+	@Column(name = Review.COLUMN_HEADER, length = 50, nullable = false)
+	private String header;
 	
 	@Column(name = Review.COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
 	private String review;
@@ -38,7 +41,7 @@ public class FilmReview {
 	public void setReviewKey(ReviewKey reviewKey) {
 		this.reviewKey = reviewKey;
 	}
-
+	
 	public User getUser() {
 		return user;
 	}
@@ -46,13 +49,44 @@ public class FilmReview {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	public String getHeader() {
+		return header;
+	}
+	
+	public void setHeader(String header) {
+		this.header = header;
+	}
+	
 	public String getReview() {
 		return review;
 	}
 
 	public void setReview(String review) {
 		this.review = review;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.reviewKey.hashCode();
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		FilmReview filmReview = (FilmReview) obj;
+		if (this.reviewKey.equals(filmReview.reviewKey)) return false;
+		
+		return true;
 	}
 	
 }

@@ -15,15 +15,22 @@ import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.composite_key.ReviewKey;
 
 @Entity
-@Table(name = Constants.TABLE_REVIEWS)
+@Table(name = Constants.TABLE.REVIEWS)
 public class Review implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static final String COLUMN_HEADER = "header";
 	public static final String COLUMN_REVIEW = "review";
 	
 	@JsonIgnore
 	@EmbeddedId
 	private ReviewKey reviewKey;
+	
+	@Column(name = COLUMN_HEADER, length = 50, nullable = false)
+	private String header;
+	
+	@Column(name = COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
+	private String review;
 	
 	@JsonIgnore
 	@ManyToOne
@@ -35,9 +42,6 @@ public class Review implements Serializable {
 	@JoinColumn(name = "film_id", insertable = false, updatable = false)
 	private Film film;
 	
-	@Column(name = COLUMN_REVIEW, nullable = false, columnDefinition = "TEXT")
-	private String review;
-	
 	protected Review() {}
 
 	public ReviewKey getReviewKey() {
@@ -46,6 +50,22 @@ public class Review implements Serializable {
 
 	public void setReviewKey(ReviewKey reviewKey) {
 		this.reviewKey = reviewKey;
+	}
+	
+	public String getHeader() {
+		return header;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
 	}
 
 	public User getUser() {
@@ -64,12 +84,27 @@ public class Review implements Serializable {
 		this.film = film;
 	}
 
-	public String getReview() {
-		return review;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.reviewKey.hashCode();
+		
+		return result;
 	}
 
-	public void setReview(String review) {
-		this.review = review;
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Review review = (Review) obj;
+		if (this.reviewKey.equals(review.reviewKey)) return false;
+		
+		return true;
 	}
 	
 }

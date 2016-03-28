@@ -29,7 +29,7 @@ import mos.edu.server.fancinema.entity.represent.UserReview;
 import mos.edu.server.fancinema.service.UserService;
 
 @RestController
-@RequestMapping(value = Constants.URI_USERS)
+@RequestMapping(value = Constants.URI.USERS)
 public class UserController {
 	
 	@Autowired
@@ -62,7 +62,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_USER_BY_ID,
+					value = Constants.URI.USER_BY_ID,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<User>> getUser(@PathVariable(value = "id_user") int id) {
 		User user = userService.getUserById(id);
@@ -73,6 +73,24 @@ public class UserController {
 			userResource.add(linkTo(methodOn(UserController.class).getUserFavorite(id, 0, 30)).withRel("favorite"));
 			userResource.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, true, 0, 30)).withRel("favorite-looked"));
 			userResource.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, false, 0, 30)).withRel("favorite-not-looked"));
+			return new ResponseEntity<>(userResource, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET,
+					params = {"login"},
+					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public HttpEntity<Resource<User>> findUserByLogin(@RequestParam(value = "login") String login) {
+		User user = userService.findUserByLogin(login);
+		if (user != null) {
+			Resource<User> userResource = new Resource<>(user);
+			userResource.add(linkTo(methodOn(UserController.class).findUserByLogin(login)).withSelfRel());
+			int idUser = user.getIdUser();
+			userResource.add(linkTo(methodOn(UserController.class).getUserReviews(idUser, 0, 30)).withRel("reviews"));
+			userResource.add(linkTo(methodOn(UserController.class).getUserFavorite(idUser, 0, 30)).withRel("favorite"));
+			userResource.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(idUser, true, 0, 30)).withRel("favorite-looked"));
+			userResource.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(idUser, false, 0, 30)).withRel("favorite-not-looked"));
 			return new ResponseEntity<>(userResource, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -89,7 +107,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_USER_RATING_FOR_FILM,
+					value = Constants.URI.USER_RATING_FOR_FILM,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<RatingFilm>> getUserRatingForFilm(@PathVariable(value = "id_user") int idUser,
 																 @PathVariable(value = "id_film") int idFilm) {
@@ -105,7 +123,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,
-					value = Constants.URI_USER_RATING_FOR_FILM,
+					value = Constants.URI.USER_RATING_FOR_FILM,
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<RatingFilm>> addUserRatingForFilm(@PathVariable(value = "id_user") int idUser,
@@ -118,7 +136,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_USER_REVIEWS,
+					value = Constants.URI.USER_REVIEWS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<UserReview>> getUserReviews(@PathVariable(value = "id_user") int id,
 														  	     @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -147,7 +165,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,
-					value = Constants.URI_USER_FILM_REVIEW,
+					value = Constants.URI.USER_FILM_REVIEW,
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Review>> addUserReviewForFilm(@PathVariable(value = "id_user") int idUser,
@@ -160,7 +178,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_USER_FAVORITE,
+					value = Constants.URI.USER_FAVORITE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<UserFavorite>> getUserFavorite(@PathVariable(value = "id_user") int id,
 													  	        	@RequestParam(value = "page", required = false, defaultValue = "0") int page, 
@@ -191,7 +209,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_USER_FAVORITE,
+					value = Constants.URI.USER_FAVORITE,
 					params = {"looked"},
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<UserFavorite>> getUserFavoriteIsLooked(@PathVariable(value = "id_user") int id,
@@ -227,7 +245,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,
-					value = Constants.URI_USER_FILM_FAVORITE,
+					value = Constants.URI.USER_FILM_FAVORITE,
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<PagedResources<UserFavorite>> addUserFavorite(@PathVariable(value = "id_user") int idUser,

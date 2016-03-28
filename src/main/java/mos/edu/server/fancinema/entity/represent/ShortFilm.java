@@ -29,7 +29,7 @@ import mos.edu.server.fancinema.entity.Person;
 import mos.edu.server.fancinema.entity.RatingFilm;
 
 @Entity
-@Table(name = Constants.TABLE_FILMS)
+@Table(name = Constants.TABLE.FILMS)
 @JsonInclude(Include.NON_EMPTY)
 public class ShortFilm {
 
@@ -55,37 +55,37 @@ public class ShortFilm {
 	private Rating rating;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_GENRE,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_GENRE,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_GENRE_ID, referencedColumnName = Genre.COLUMN_ID_GENRE))
 	private Set<Genre> genres;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_COUNTRY,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_COUNTRY,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_COUNTRY_ID, referencedColumnName = Country.COLUMN_ID_COUNTRY))
 	private Set<Country> countries;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_WRITER,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_WRITER,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_WRITER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> writers;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_PRODUCER,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_PRODUCER,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_PRODUCER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> producers;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_DIRECTOR,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_DIRECTOR,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_DIRECTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> directors;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_ACTOR,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_ACTOR,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_ACTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> actors;
@@ -169,6 +169,29 @@ public class ShortFilm {
 
 	public void setRatingFilms(Set<RatingFilm> ratingFilms) {
 		this.ratingFilms = ratingFilms;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idFilm;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		ShortFilm shortFilm = (ShortFilm) obj;
+		if (this.idFilm != shortFilm.idFilm) return false;
+		
+		return true;
 	}
 	
 }

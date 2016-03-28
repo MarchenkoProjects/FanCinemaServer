@@ -15,7 +15,7 @@ import mos.edu.server.fancinema.Constants;
 import mos.edu.server.fancinema.entity.composite_key.FavoriteKey;
 
 @Entity
-@Table(name = Constants.TABLE_FAVORITE)
+@Table(name = Constants.TABLE.FAVORITE)
 public class Favorite implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -76,6 +76,29 @@ public class Favorite implements Serializable {
 
 	public void setLooked(boolean looked) {
 		this.looked = looked;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + favoriteKey.hashCode();
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Favorite favorite = (Favorite) obj;
+		if (!this.favoriteKey.equals(favorite.favoriteKey)) return false;
+		
+		return true;
 	}
 	
 }

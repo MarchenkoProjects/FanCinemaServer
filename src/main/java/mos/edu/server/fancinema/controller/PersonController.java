@@ -24,7 +24,7 @@ import mos.edu.server.fancinema.entity.represent.FilmsPerson;
 import mos.edu.server.fancinema.service.PersonService;
 
 @RestController
-@RequestMapping(value = Constants.URI_PERSONS)
+@RequestMapping(value = Constants.URI.PERSONS)
 public class PersonController {
 
 	@Autowired
@@ -57,7 +57,7 @@ public class PersonController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_PERSON_BY_ID,
+					value = Constants.URI.PERSON_BY_ID,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Person>> getPerson(@PathVariable(value = "id_person") int id) {
 		Person person = personService.getPerson(id);
@@ -71,7 +71,7 @@ public class PersonController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,
-					value = Constants.URI_PERSON_FILMS,
+					value = Constants.URI.PERSON_FILMS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<FilmsPerson>> getFilmsOfPerson(@PathVariable(value = "id_person") int id) {
 		

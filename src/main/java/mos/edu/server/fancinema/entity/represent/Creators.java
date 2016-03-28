@@ -20,7 +20,7 @@ import mos.edu.server.fancinema.entity.Film;
 import mos.edu.server.fancinema.entity.Person;
 
 @Entity
-@Table(name = Constants.TABLE_FILMS)
+@Table(name = Constants.TABLE.FILMS)
 public class Creators {
 
 	@Id
@@ -30,25 +30,25 @@ public class Creators {
 	private int idFilm;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_WRITER,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_WRITER,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_WRITER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> writers;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_PRODUCER,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_PRODUCER,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_PRODUCER_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> producers;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_DIRECTOR,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_DIRECTOR,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_DIRECTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> directors;
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = Constants.JOIN_TABLE_FILM_ACTOR,
+	@JoinTable(name = Constants.TABLE.JOIN_FILM_ACTOR,
 			   joinColumns = @JoinColumn(name = Film.JOIN_COLUMN_FILM_ID, referencedColumnName = Film.COLUMN_ID_FILM),
 			   inverseJoinColumns = @JoinColumn(name = Film.JOIN_COLUMN_ACTOR_ID, referencedColumnName = Person.COLUMN_ID_PERSON))
 	private Set<Person> actors;
@@ -93,6 +93,29 @@ public class Creators {
 
 	public void setActors(Set<Person> actors) {
 		this.actors = actors;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		
+		int result = 1;
+		result = prime * result + this.idFilm;
+		
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!super.equals(obj)) return false;
+		if (obj == null) return false;
+		
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Creators creators = (Creators) obj;
+		if (this.idFilm != creators.idFilm) return false;
+		
+		return true;
 	}
 	
 }
