@@ -9,7 +9,7 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		Class<?>[] rootConfigClasses = {
+		final Class<?>[] rootConfigClasses = {
 			DatabaseConfig.class
 		};
 		return rootConfigClasses;
@@ -17,7 +17,7 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		Class<?>[] servletConfigClasses = {
+		final Class<?>[] servletConfigClasses = {
 			WebConfig.class
 		};
 		return servletConfigClasses;
@@ -25,7 +25,7 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 	
 	@Override
 	protected String[] getServletMappings() {
-		String[] servletMappings = {
+		final String[] servletMappings = {
 			Constants.URI.HOME
 		};
 		return servletMappings;

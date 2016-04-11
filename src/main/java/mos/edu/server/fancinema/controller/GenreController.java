@@ -36,19 +36,21 @@ public class GenreController {
 		if (page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<Genre> genres = genreService.getGenres(page, size);
+		final Page<Genre> genres = genreService.getGenres(page, size);
 		if (genres.hasContent()) {
-			PageMetadata metadata = new PageMetadata(genres.getSize(), genres.getNumber(), genres.getTotalElements(), genres.getTotalPages());
-			PagedResources<Genre> genreResources = new PagedResources<>(genres.getContent(), metadata);
+			final long lastPage = genres.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(genres.getSize(), genres.getNumber(), genres.getTotalElements(), lastPage);
+			final PagedResources<Genre> genreResources = 
+					new PagedResources<>(genres.getContent(), metadata);
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				genreResources.add(linkTo(methodOn(GenreController.class).getGenres(prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				genreResources.add(linkTo(methodOn(GenreController.class).getGenres(prevPage, size)).withRel("prev"));
 			genreResources.add(linkTo(methodOn(GenreController.class).getGenres(page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = genres.getTotalPages();
-			if (next_page < last_page)
-				genreResources.add(linkTo(methodOn(GenreController.class).getGenres(next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				genreResources.add(linkTo(methodOn(GenreController.class).getGenres(nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(genreResources, HttpStatus.OK);
 		}
@@ -61,19 +63,24 @@ public class GenreController {
 	public HttpEntity<PagedResources<ShortFilm>> getFilmsOfGenre(@PathVariable(value = "id_genre") byte id,
 																 @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 																 @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
-		Page<ShortFilm> filmsGenre = genreService.getFilmsOfGenre(id, page, size);
+		if (id <= 0 || page < 0 || size <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final Page<ShortFilm> filmsGenre = genreService.getFilmsOfGenre(id, page, size);
 		if (filmsGenre.hasContent()) {
-			PageMetadata metadata = new PageMetadata(filmsGenre.getSize(), filmsGenre.getNumber(), filmsGenre.getTotalElements(), filmsGenre.getTotalPages());
-			PagedResources<ShortFilm> filmsGenreResource = new PagedResources<>(filmsGenre.getContent(), metadata);
+			final long lastPage = filmsGenre.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(filmsGenre.getSize(), filmsGenre.getNumber(), filmsGenre.getTotalElements(), lastPage);
+			final PagedResources<ShortFilm> filmsGenreResource = 
+					new PagedResources<>(filmsGenre.getContent(), metadata);
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				filmsGenreResource.add(linkTo(methodOn(GenreController.class).getFilmsOfGenre(id, prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				filmsGenreResource.add(linkTo(methodOn(GenreController.class).getFilmsOfGenre(id, prevPage, size)).withRel("prev"));
 			filmsGenreResource.add(linkTo(methodOn(GenreController.class).getFilmsOfGenre(id, page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = filmsGenre.getTotalPages();
-			if (next_page < last_page)
-				filmsGenreResource.add(linkTo(methodOn(GenreController.class).getFilmsOfGenre(id, next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				filmsGenreResource.add(linkTo(methodOn(GenreController.class).getFilmsOfGenre(id, nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(filmsGenreResource, HttpStatus.OK);
 		}

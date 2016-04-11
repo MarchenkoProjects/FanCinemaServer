@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<User> getUsers(int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return userRepository.findAll(pageRequest);
 	}
 	
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public User findUserByLogin(String login) {
+	public User getUserByLogin(String login) {
 		return userRepository.findUserByLogin(login);
 	}
 	
@@ -71,14 +71,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public RatingFilm addUserRatingForFilm(int idUser, int idFilm, byte value) {
-		RatingFilm newRatingFilm = new RatingFilm(new RatingFilmKey(idUser, idFilm), value);
+		final RatingFilm newRatingFilm = new RatingFilm(new RatingFilmKey(idUser, idFilm), value);
 		return ratingFilmRepository.saveAndFlush(newRatingFilm);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserReview> getUserReviews(int id, int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return userRepository.findUserReviews(id, pageRequest);
 	}
 	
@@ -92,21 +92,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserFavorite> getUserFavorite(int id, int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return userRepository.findUserFavorite(id, pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserFavorite> getUserFavoriteIsLooked(int id, boolean looked, int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return userRepository.findUserFavoriteIsLooked(id, looked, pageRequest);
 	}
 
 	@Override
 	@Transactional
 	public Favorite addUserFavorite(int idUser, int idFilm, boolean looked) {
-		Favorite newFavorite = new Favorite(new FavoriteKey(idUser, idFilm), looked);
+		final Favorite newFavorite = new Favorite(new FavoriteKey(idUser, idFilm), looked);
 		return favoriteRepository.saveAndFlush(newFavorite);
 	}
 

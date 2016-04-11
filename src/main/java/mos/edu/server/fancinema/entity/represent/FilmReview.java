@@ -23,7 +23,7 @@ public class FilmReview {
 	private ReviewKey reviewKey;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = Review.JOIN_COLUMN_USER, insertable = false, updatable = false)
 	private User user;
 	
 	@Column(name = Review.COLUMN_HEADER, length = 50, nullable = false)

@@ -21,14 +21,14 @@ public class GenreServiceImpl implements GenreService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Genre> getGenres(int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return genreRepository.findAll(pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<ShortFilm> getFilmsOfGenre(byte id, int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return genreRepository.findFilmsOfGenre(id, pageRequest);
 	}
 

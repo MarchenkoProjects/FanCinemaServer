@@ -37,19 +37,21 @@ public class PersonController {
 		if (page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<Person> persons = personService.getPersons(page, size);
+		final Page<Person> persons = personService.getPersons(page, size);
 		if (persons.hasContent()) {
-			PageMetadata metadata = new PageMetadata(persons.getSize(), persons.getNumber(), persons.getTotalElements(), persons.getTotalPages());
-			PagedResources<Person> personsResource = new PagedResources<>(persons.getContent(), metadata);
+			final long lastPage = persons.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(persons.getSize(), persons.getNumber(), persons.getTotalElements(), lastPage);
+			final PagedResources<Person> personsResource = 
+					new PagedResources<>(persons.getContent(), metadata);
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				personsResource.add(linkTo(methodOn(PersonController.class).getPersons(prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				personsResource.add(linkTo(methodOn(PersonController.class).getPersons(prevPage, size)).withRel("prev"));
 			personsResource.add(linkTo(methodOn(PersonController.class).getPersons(page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = persons.getTotalPages();
-			if (next_page < last_page)
-				personsResource.add(linkTo(methodOn(PersonController.class).getPersons(next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				personsResource.add(linkTo(methodOn(PersonController.class).getPersons(nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(personsResource, HttpStatus.OK);
 		}
@@ -60,9 +62,12 @@ public class PersonController {
 					value = Constants.URI.PERSON_BY_ID,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<Person>> getPerson(@PathVariable(value = "id_person") int id) {
-		Person person = personService.getPerson(id);
+		if (id <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final Person person = personService.getPerson(id);
 		if (person != null) {
-			Resource<Person> personResource = new Resource<>(person);
+			final Resource<Person> personResource = new Resource<>(person);
 			personResource.add(linkTo(methodOn(PersonController.class).getPerson(id)).withSelfRel());
 			personResource.add(linkTo(methodOn(PersonController.class).getFilmsOfPerson(id)).withRel("films"));
 			return new ResponseEntity<>(personResource, HttpStatus.OK);
@@ -74,10 +79,12 @@ public class PersonController {
 					value = Constants.URI.PERSON_FILMS,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<FilmsPerson>> getFilmsOfPerson(@PathVariable(value = "id_person") int id) {
+		if (id <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		FilmsPerson filmsPerson = personService.getFilmsOfPerson(id);
+		final FilmsPerson filmsPerson = personService.getFilmsOfPerson(id);
 		if (filmsPerson != null) {
-			Resource<FilmsPerson> filmsPersonResource = new Resource<>(filmsPerson);
+			final Resource<FilmsPerson> filmsPersonResource = new Resource<>(filmsPerson);
 			filmsPersonResource.add(linkTo(methodOn(PersonController.class).getPerson(id)).withRel("self-person"));
 			filmsPersonResource.add(linkTo(methodOn(PersonController.class).getFilmsOfPerson(id)).withSelfRel());
 			return new ResponseEntity<>(filmsPersonResource, HttpStatus.OK);

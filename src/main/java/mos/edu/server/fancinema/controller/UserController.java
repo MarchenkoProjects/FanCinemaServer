@@ -42,19 +42,21 @@ public class UserController {
 		if (page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<User> users = userService.getUsers(page, size);
+		final Page<User> users = userService.getUsers(page, size);
 		if (users.hasContent()) {
-			PageMetadata metadata = new PageMetadata(users.getSize(), users.getNumber(), users.getTotalElements(), users.getTotalPages());
-			PagedResources<User> usersResource = new PagedResources<>(users.getContent(), metadata);
+			final long lastPage = users.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(users.getSize(), users.getNumber(), users.getTotalElements(), lastPage);
+			final PagedResources<User> usersResource = 
+					new PagedResources<>(users.getContent(), metadata);
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				usersResource.add(linkTo(methodOn(UserController.class).getUsers(prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				usersResource.add(linkTo(methodOn(UserController.class).getUsers(prevPage, size)).withRel("prev"));
 			usersResource.add(linkTo(methodOn(UserController.class).getUsers(page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = users.getTotalPages();
-			if (next_page < last_page)
-				usersResource.add(linkTo(methodOn(UserController.class).getUsers(next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				usersResource.add(linkTo(methodOn(UserController.class).getUsers(nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(usersResource, HttpStatus.OK);
 		}
@@ -65,9 +67,12 @@ public class UserController {
 					value = Constants.URI.USER_BY_ID,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<User>> getUser(@PathVariable(value = "id_user") int id) {
-		User user = userService.getUserById(id);
+		if (id <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final User user = userService.getUserById(id);
 		if (user != null) {
-			Resource<User> userResource = new Resource<>(user);
+			final Resource<User> userResource = new Resource<>(user);
 			userResource.add(linkTo(methodOn(UserController.class).getUser(id)).withSelfRel());
 			userResource.add(linkTo(methodOn(UserController.class).getUserReviews(id, 0, 30)).withRel("reviews"));
 			userResource.add(linkTo(methodOn(UserController.class).getUserFavorite(id, 0, 30)).withRel("favorite"));
@@ -82,11 +87,14 @@ public class UserController {
 					params = {"login"},
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<User>> findUserByLogin(@RequestParam(value = "login") String login) {
-		User user = userService.findUserByLogin(login);
+		if (login.isEmpty()) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final User user = userService.getUserByLogin(login);
 		if (user != null) {
-			Resource<User> userResource = new Resource<>(user);
+			final Resource<User> userResource = new Resource<>(user);
 			userResource.add(linkTo(methodOn(UserController.class).findUserByLogin(login)).withSelfRel());
-			int idUser = user.getIdUser();
+			final int idUser = user.getIdUser();
 			userResource.add(linkTo(methodOn(UserController.class).getUserReviews(idUser, 0, 30)).withRel("reviews"));
 			userResource.add(linkTo(methodOn(UserController.class).getUserFavorite(idUser, 0, 30)).withRel("favorite"));
 			userResource.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(idUser, true, 0, 30)).withRel("favorite-looked"));
@@ -100,7 +108,7 @@ public class UserController {
 					consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<User>> addUser(@RequestBody User user) {
-		User addedUser = userService.addUser(user);
+		final User addedUser = userService.addUser(user);
 		if(addedUser != null)
 			return getUser(user.getIdUser());
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -111,9 +119,12 @@ public class UserController {
 					produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HttpEntity<Resource<RatingFilm>> getUserRatingForFilm(@PathVariable(value = "id_user") int idUser,
 																 @PathVariable(value = "id_film") int idFilm) {
-		RatingFilm filmRating = userService.getUserRatingForFilm(idUser, idFilm);
+		if (idUser <= 0 || idFilm <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final RatingFilm filmRating = userService.getUserRatingForFilm(idUser, idFilm);
 		if (filmRating != null) {
-			Resource<RatingFilm> filmRatingResource = new Resource<>(filmRating);
+			final Resource<RatingFilm> filmRatingResource = new Resource<>(filmRating);
 			filmRatingResource.add(linkTo(methodOn(UserController.class).getUser(idUser)).withRel("self-user"));
 			filmRatingResource.add(linkTo(methodOn(FilmController.class).getFilm(idFilm)).withRel("self-film"));
 			filmRatingResource.add(linkTo(methodOn(UserController.class).getUserRatingForFilm(idUser, idFilm)).withSelfRel());
@@ -129,7 +140,10 @@ public class UserController {
 	public HttpEntity<Resource<RatingFilm>> addUserRatingForFilm(@PathVariable(value = "id_user") int idUser,
 											  	  			 	 @PathVariable(value = "id_film") int idFilm,
 											  	  			 	 @RequestParam(value = "value") byte value) {
-		RatingFilm addedRatingFilm = userService.addUserRatingForFilm(idUser, idFilm, value);
+		if (idUser <= 0 || idFilm <= 0 || value <= 0 || value > 10) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final RatingFilm addedRatingFilm = userService.addUserRatingForFilm(idUser, idFilm, value);
 		if (addedRatingFilm != null) 
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -141,23 +155,25 @@ public class UserController {
 	public HttpEntity<PagedResources<UserReview>> getUserReviews(@PathVariable(value = "id_user") int id,
 														  	     @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 														  	     @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
-		if (page < 0 || size <= 0) 
+		if (id <= 0 || page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<UserReview> reviews = userService.getUserReviews(id, page, size);
+		final Page<UserReview> reviews = userService.getUserReviews(id, page, size);
 		if (reviews != null && reviews.hasContent()) {
-			PageMetadata metadata = new PageMetadata(reviews.getSize(), reviews.getNumber(), reviews.getTotalElements(), reviews.getTotalPages());
-			PagedResources<UserReview> reviewResources = new PagedResources<>(reviews.getContent(), metadata);
+			final long lastPage = reviews.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(reviews.getSize(), reviews.getNumber(), reviews.getTotalElements(), lastPage);
+			final PagedResources<UserReview> reviewResources = 
+					new PagedResources<>(reviews.getContent(), metadata);
 			reviewResources.add(linkTo(methodOn(UserController.class).getUser(id)).withRel("self-user"));
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				reviewResources.add(linkTo(methodOn(UserController.class).getUserReviews(id, prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				reviewResources.add(linkTo(methodOn(UserController.class).getUserReviews(id, prevPage, size)).withRel("prev"));
 			reviewResources.add(linkTo(methodOn(UserController.class).getUserReviews(id, page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = reviews.getTotalPages();
-			if (next_page < last_page)
-				reviewResources.add(linkTo(methodOn(UserController.class).getUserReviews(id, next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				reviewResources.add(linkTo(methodOn(UserController.class).getUserReviews(id, nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(reviewResources, HttpStatus.OK);
 		}
@@ -171,7 +187,10 @@ public class UserController {
 	public HttpEntity<Resource<Review>> addUserReviewForFilm(@PathVariable(value = "id_user") int idUser,
 													  		 @PathVariable(value = "id_film") int idFilm,
 													  		 @RequestBody Review review) {
-		Review addedReview = userService.addUserReview(idUser, idFilm, review);
+		if (idUser <= 0 || idFilm <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final Review addedReview = userService.addUserReview(idUser, idFilm, review);
 		if (addedReview != null) 
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -183,25 +202,27 @@ public class UserController {
 	public HttpEntity<PagedResources<UserFavorite>> getUserFavorite(@PathVariable(value = "id_user") int id,
 													  	        	@RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 													  	        	@RequestParam(value = "size", required = false, defaultValue = "30") int size) {
-		if (page < 0 || size <= 0) 
+		if (id <= 0 || page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<UserFavorite> favorite = userService.getUserFavorite(id, page, size);
+		final Page<UserFavorite> favorite = userService.getUserFavorite(id, page, size);
 		if (favorite != null && favorite.hasContent()) {
-			PageMetadata metadata = new PageMetadata(favorite.getSize(), favorite.getNumber(), favorite.getTotalElements(), favorite.getTotalPages());
-			PagedResources<UserFavorite> favoriteResources = new PagedResources<>(favorite.getContent(), metadata);
+			final long lastPage = favorite.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(favorite.getSize(), favorite.getNumber(), favorite.getTotalElements(), lastPage);
+			final PagedResources<UserFavorite> favoriteResources = 
+					new PagedResources<>(favorite.getContent(), metadata);
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUser(id)).withRel("self-user"));
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, true, 0, 30)).withRel("favorite-looked"));
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, false, 0, 30)).withRel("favorite-not-looked"));
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavorite(id, prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavorite(id, prevPage, size)).withRel("prev"));
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavorite(id, page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = favorite.getTotalPages();
-			if (next_page < last_page)
-				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavorite(id, next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavorite(id, nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(favoriteResources, HttpStatus.OK);
 		}
@@ -216,13 +237,16 @@ public class UserController {
 																			@RequestParam(value = "looked", required = false, defaultValue = "0") boolean looked,
 																  	        @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 																  	        @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
-		if (page < 0 || size <= 0) 
+		if (id <= 0 || page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<UserFavorite> favorite = userService.getUserFavoriteIsLooked(id, looked, page, size);
+		final Page<UserFavorite> favorite = userService.getUserFavoriteIsLooked(id, looked, page, size);
 		if (favorite != null && favorite.hasContent()) {
-			PageMetadata metadata = new PageMetadata(favorite.getSize(), favorite.getNumber(), favorite.getTotalElements(), favorite.getTotalPages());
-			PagedResources<UserFavorite> favoriteResources = new PagedResources<>(favorite.getContent(), metadata);
+			final long lastPage = favorite.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(favorite.getSize(), favorite.getNumber(), favorite.getTotalElements(), lastPage);
+			final PagedResources<UserFavorite> favoriteResources = 
+					new PagedResources<>(favorite.getContent(), metadata);
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUser(id)).withRel("self-user"));
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavorite(id, page, size)).withRel("favorite"));
 			if (looked)
@@ -230,14 +254,13 @@ public class UserController {
 			else
 				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, true, 0, 30)).withRel("favorite-looked"));
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, looked, prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, looked, prevPage, size)).withRel("prev"));
 			favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, looked, page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = favorite.getTotalPages();
-			if (next_page < last_page)
-				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, looked, next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				favoriteResources.add(linkTo(methodOn(UserController.class).getUserFavoriteIsLooked(id, looked, nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(favoriteResources, HttpStatus.OK);
 		}
@@ -251,7 +274,10 @@ public class UserController {
 	public HttpEntity<PagedResources<UserFavorite>> addUserFavorite(@PathVariable(value = "id_user") int idUser,
 															        @PathVariable(value = "id_film") int idFilm,
 															        @RequestParam(value = "looked", required = false, defaultValue = "0") boolean looked) {
-		Favorite addedFavorite = userService.addUserFavorite(idUser, idFilm, looked);
+		if (idUser <= 0 || idFilm <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final Favorite addedFavorite = userService.addUserFavorite(idUser, idFilm, looked);
 		if (addedFavorite != null)
 			return getUserFavorite(idUser, 0, 30);
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);

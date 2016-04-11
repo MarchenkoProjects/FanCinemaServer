@@ -41,8 +41,8 @@ public class Person implements Serializable {
 	public static final String ACTORS_MAPPED_FILMS = "actors";
 
 	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
+	@GeneratedValue(generator = Constants.INCREMENT_GENERATOR)
+	@GenericGenerator(name = Constants.INCREMENT_GENERATOR, strategy = Constants.INCREMENT_GENERATOR)
 	@Column(name = COLUMN_ID_PERSON, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idPerson;
 	
@@ -91,7 +91,7 @@ public class Person implements Serializable {
 	}
 
 	public String getFotoUrl() {
-		this.fotoUrl = Constants.URL_FOR_PICTURES + String.valueOf(idPerson) + Constants.PICTURES_EXTENSION;
+		this.fotoUrl = Constants.URL_FOR_PERSON_PICTURES + String.valueOf(idPerson) + Constants.PICTURES_EXTENSION;
 		return fotoUrl;
 	}
 

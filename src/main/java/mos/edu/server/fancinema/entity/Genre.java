@@ -33,8 +33,8 @@ public class Genre implements Serializable {
 	public static final String GENRES_MAPPED_FILMS = "genres";
 	
 	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
+	@GeneratedValue(generator = Constants.INCREMENT_GENERATOR)
+	@GenericGenerator(name = Constants.INCREMENT_GENERATOR, strategy = Constants.INCREMENT_GENERATOR)
 	@Column(name = COLUMN_ID_GENRE, nullable = false, columnDefinition = "TINYINT(2) UNSIGNED")
 	private byte idGenre;
 	

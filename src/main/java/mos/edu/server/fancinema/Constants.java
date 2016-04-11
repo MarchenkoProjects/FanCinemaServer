@@ -2,6 +2,8 @@ package mos.edu.server.fancinema;
 
 public final class Constants {
 	
+	public static final String INCREMENT_GENERATOR = "increment";
+	
 	public static final class TABLE {
 		public static final String FILMS = "films";
 		public static final String GENRES = "genres";
@@ -21,7 +23,8 @@ public final class Constants {
 		public static final String USERS = "users";
 	}
 	
-	public static final String URL_FOR_PICTURES = "/"; // ???
+	public static final String URL_FOR_PICTURES = "/posters/";
+	public static final String URL_FOR_PERSON_PICTURES = URL_FOR_PICTURES + "persons/";
 	public static final String PICTURES_EXTENSION = ".jpg";
 	
 	public static final class URI {

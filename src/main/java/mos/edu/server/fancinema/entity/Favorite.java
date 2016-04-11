@@ -19,6 +19,8 @@ import mos.edu.server.fancinema.entity.composite_key.FavoriteKey;
 public class Favorite implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static final String JOIN_COLUMN_USER = "user_id";
+	public static final String JOIN_COLUMN_FILM = "film_id";
 	public static final String COLUMN_LOOKED = "looked";
 
 	@JsonIgnore
@@ -27,12 +29,12 @@ public class Favorite implements Serializable {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = JOIN_COLUMN_USER, insertable = false, updatable = false)
 	private User user;
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "film_id", insertable = false, updatable = false)
+	@JoinColumn(name = JOIN_COLUMN_FILM, insertable = false, updatable = false)
 	private Film film;
 	
 	@Column(name = COLUMN_LOOKED, nullable = false, columnDefinition = "BIT(1) DEFAULT b'0'")

@@ -24,11 +24,11 @@ public class UserReview {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = Review.JOIN_COLUMN_USER, insertable = false, updatable = false)
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name = "film_id", insertable = false, updatable = false)
+	@JoinColumn(name = Review.JOIN_COLUMN_FILM, insertable = false, updatable = false)
 	private ShortFilm film;
 	
 	@Column(name = Review.COLUMN_HEADER, length = 50, nullable = false)

@@ -24,8 +24,8 @@ import mos.edu.server.fancinema.entity.Person;
 public class Creators {
 
 	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
+	@GeneratedValue(generator = Constants.INCREMENT_GENERATOR)
+	@GenericGenerator(name = Constants.INCREMENT_GENERATOR, strategy = Constants.INCREMENT_GENERATOR)
 	@Column(name = Film.COLUMN_ID_FILM, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idFilm;
 	

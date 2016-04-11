@@ -30,9 +30,8 @@ public class Country implements Serializable {
 	private static final String COUNTRIES_MAPPED_FILMS = "countries";
 	
 	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", 
-					  strategy = "increment")
+	@GeneratedValue(generator = Constants.INCREMENT_GENERATOR)
+	@GenericGenerator(name = Constants.INCREMENT_GENERATOR, strategy = Constants.INCREMENT_GENERATOR)
 	@Column(name = COLUMN_ID_COUNTRY, nullable = false, columnDefinition = "SMALLINT(3) UNSIGNED")
 	private short idCountry;
 	

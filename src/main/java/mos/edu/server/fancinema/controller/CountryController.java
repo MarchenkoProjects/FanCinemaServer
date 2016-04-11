@@ -36,19 +36,21 @@ public class CountryController {
 		if (page < 0 || size <= 0) 
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		Page<Country> countries = countryService.getCountries(page, size);
+		final Page<Country> countries = countryService.getCountries(page, size);
 		if (countries.hasContent()) {
-			PageMetadata metadata = new PageMetadata(countries.getSize(), countries.getNumber(), countries.getTotalElements(), countries.getTotalPages());
-			PagedResources<Country> countryResources = new PagedResources<>(countries.getContent(), metadata);
+			final long lastPage = countries.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(countries.getSize(), countries.getNumber(), countries.getTotalElements(), lastPage);
+			final PagedResources<Country> countryResources = 
+					new PagedResources<>(countries.getContent(), metadata);
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				countryResources.add(linkTo(methodOn(CountryController.class).getCountries(prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				countryResources.add(linkTo(methodOn(CountryController.class).getCountries(prevPage, size)).withRel("prev"));
 			countryResources.add(linkTo(methodOn(CountryController.class).getCountries(page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = countries.getTotalPages();
-			if (next_page < last_page)
-				countryResources.add(linkTo(methodOn(CountryController.class).getCountries(next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				countryResources.add(linkTo(methodOn(CountryController.class).getCountries(nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(countryResources, HttpStatus.OK);
 		}
@@ -61,19 +63,24 @@ public class CountryController {
 	public HttpEntity<PagedResources<ShortFilm>> getFilmsOfCountry(@PathVariable(value = "id_country") short id,
 															 	   @RequestParam(value = "page", required = false, defaultValue = "0") int page, 
 															 	   @RequestParam(value = "size", required = false, defaultValue = "30") int size) {
-		Page<ShortFilm> filmsCountry = countryService.getFilmsOfCountry(id, page, size);
+		if (id <= 0 || page < 0 || size <= 0) 
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		final Page<ShortFilm> filmsCountry = countryService.getFilmsOfCountry(id, page, size);
 		if (filmsCountry.hasContent()) {
-			PageMetadata metadata = new PageMetadata(filmsCountry.getSize(), filmsCountry.getNumber(), filmsCountry.getTotalElements(), filmsCountry.getTotalPages());
-			PagedResources<ShortFilm> filmsCountryResource = new PagedResources<>(filmsCountry.getContent(), metadata);
+			final long lastPage = filmsCountry.getTotalPages();
+			final PageMetadata metadata = 
+					new PageMetadata(filmsCountry.getSize(), filmsCountry.getNumber(), filmsCountry.getTotalElements(), lastPage);
+			final PagedResources<ShortFilm> filmsCountryResource = 
+					new PagedResources<>(filmsCountry.getContent(), metadata);
 			
-			int prev_page = page - 1;
-			if (prev_page >= 0)
-				filmsCountryResource.add(linkTo(methodOn(CountryController.class).getFilmsOfCountry(id, prev_page, size)).withRel("prev"));
+			final int prevPage = page - 1;
+			if (prevPage >= 0)
+				filmsCountryResource.add(linkTo(methodOn(CountryController.class).getFilmsOfCountry(id, prevPage, size)).withRel("prev"));
 			filmsCountryResource.add(linkTo(methodOn(CountryController.class).getFilmsOfCountry(id, page, size)).withSelfRel());
-			int next_page = page + 1;
-			long last_page = filmsCountry.getTotalPages();
-			if (next_page < last_page)
-				filmsCountryResource.add(linkTo(methodOn(CountryController.class).getFilmsOfCountry(id, next_page, size)).withRel("next"));
+			final int nextPage = page + 1;
+			if (nextPage < lastPage)
+				filmsCountryResource.add(linkTo(methodOn(CountryController.class).getFilmsOfCountry(id, nextPage, size)).withRel("next"));
 			
 			return new ResponseEntity<>(filmsCountryResource, HttpStatus.OK);
 		}

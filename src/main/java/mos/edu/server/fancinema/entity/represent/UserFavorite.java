@@ -24,11 +24,11 @@ public class UserFavorite {
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = Favorite.JOIN_COLUMN_USER, insertable = false, updatable = false)
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name = "film_id", insertable = false, updatable = false)
+	@JoinColumn(name = Favorite.JOIN_COLUMN_FILM, insertable = false, updatable = false)
 	private ShortFilm film;
 	
 	@Column(name = Favorite.COLUMN_LOOKED, nullable = false, columnDefinition = "BIT(1) DEFAULT b'0'")

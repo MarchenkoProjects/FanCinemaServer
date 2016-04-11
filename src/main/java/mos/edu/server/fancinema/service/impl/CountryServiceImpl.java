@@ -21,14 +21,14 @@ public class CountryServiceImpl implements CountryService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Country> getCountries(int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return countryRepository.findAll(pageRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<ShortFilm> getFilmsOfCountry(short id, int page, int size) {
-		Pageable pageRequest = new PageRequest(page, size);
+		final Pageable pageRequest = new PageRequest(page, size);
 		return countryRepository.findFilmsOfCountry(id, pageRequest);
 	}
 

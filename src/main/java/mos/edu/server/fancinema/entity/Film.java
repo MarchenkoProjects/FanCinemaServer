@@ -54,8 +54,8 @@ public class Film implements Serializable {
 	public static final String FILMS_MAPPED_USERS = "film";
 	
 	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
+	@GeneratedValue(generator = Constants.INCREMENT_GENERATOR)
+	@GenericGenerator(name = Constants.INCREMENT_GENERATOR, strategy = Constants.INCREMENT_GENERATOR)
 	@Column(name = COLUMN_ID_FILM, nullable = false, columnDefinition = "INT(10) UNSIGNED")
 	private int idFilm;
 	

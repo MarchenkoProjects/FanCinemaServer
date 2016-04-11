@@ -22,6 +22,8 @@ import mos.edu.server.fancinema.entity.composite_key.RatingFilmKey;
 public class RatingFilm implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static final String JOIN_COLUMN_USER = "user_id";
+	public static final String JOIN_COLUMN_FILM = "film_id";
 	public static final String COLUMN_RATING = "rating";
 	
 	@JsonIgnore
@@ -29,12 +31,12 @@ public class RatingFilm implements Serializable {
 	private RatingFilmKey ratingFilmKey;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id", insertable = false, updatable = false)
+	@JoinColumn(name = JOIN_COLUMN_USER, insertable = false, updatable = false)
 	private User user;
 	
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "film_id", insertable = false, updatable = false)
+	@JoinColumn(name = JOIN_COLUMN_FILM, insertable = false, updatable = false)
 	private Film film;
 
 	@Column(name = COLUMN_RATING, nullable = false, columnDefinition = "TINYINT(2) UNSIGNED")
